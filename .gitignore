@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+.env
+.env.*
+
+# Node / frontend
+node_modules/
+dist/
+build/
+.parcel-cache/
+
+# IDE
+.vscode/
+.DS_Store
+
+# Data / local artifacts
+*.sqlite3
+*.db
+chroma_db/
+*.log
+
+# Root lockfile & nested duplicate dirs
+/package-lock.json
+IIIT-PROJECT-TEAM-16*/
+frontend~HEAD

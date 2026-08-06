@@ -1,0 +1,464 @@
+================================================================================
+SAMPLE INSURANCE POLICY DOCUMENTS FOR RAG SYSTEM
+================================================================================
+
+Document 1: AUTO INSURANCE POLICY
+Document Name: auto_policy.txt
+================================================================================
+
+SECTION 1: COVERAGE TYPES AND LIMITS
+
+1.1 Bodily Injury Liability Coverage
+Bodily injury liability coverage applies to bodily injury or death caused by an accident 
+that you are legally liable for. This coverage pays for medical expenses, rehabilitation 
+costs, lost wages, and pain and suffering of other parties involved in an accident caused 
+by your vehicle.
+
+Coverage Limits:
+- Per Person Limit: $25,000
+- Per Accident Limit: $50,000
+- This means we pay up to $25,000 per injured person and up to $50,000 total per accident
+
+1.2 Property Damage Liability Coverage
+Property damage liability covers damage to someone else's property caused by your vehicle. 
+This includes damage to other vehicles, buildings, fences, utility poles, and personal property.
+
+Coverage Limits:
+- Per Accident Limit: $25,000
+The policyholder may select higher limits based on their needs and asset protection goals.
+
+1.3 Collision Coverage
+Collision coverage applies to damage from collision with another vehicle or object. This covers 
+repair or replacement costs for your vehicle regardless of who is at fault in the accident.
+
+Deductible Options:
+- The policyholder may select a deductible of $250, $500, or $1,000
+- If no deductible is specified, the default is $500
+- The deductible applies per occurrence (per accident)
+- Higher deductibles result in lower monthly premiums
+
+Maximum Coverage Limit: $50,000 per occurrence, $100,000 per policy year
+
+1.4 Comprehensive Coverage
+Comprehensive coverage protects against non-collision damages including theft, vandalism, 
+natural disasters, and weather-related incidents. This coverage applies to losses caused by 
+fire, explosion, falling objects, missiles, or any other cause not involving collision.
+
+Deductible Options: Same as collision coverage ($250, $500, $1,000)
+Maximum Coverage Limit: $50,000 per occurrence
+
+SECTION 2: ADDITIONAL COVERAGES
+
+2.1 Uninsured Motorist Coverage
+Uninsured motorist coverage protects you and your passengers if you are hit by an uninsured 
+or underinsured driver. This coverage pays for medical expenses and lost wages up to your 
+selected limit.
+
+Coverage Limit: $15,000 per person, $30,000 per accident
+
+2.2 Medical Payments Coverage
+Medical payments coverage pays for medical and funeral expenses for you and your passengers 
+following an auto accident, regardless of fault.
+
+Coverage Limit: $5,000 per person
+Covered Expenses:
+- Ambulance services
+- Hospital room charges
+- Surgical fees
+- X-rays and laboratory tests
+- Dental services
+- Funeral expenses
+
+2.3 Rideshare Coverage
+Rideshare coverage applies when you are driving for rideshare services like Uber or Lyft. 
+This coverage extends liability and collision protection while you are actively engaged in 
+rideshare services.
+
+Important Note: Standard auto insurance does not cover rideshare activities. You must add 
+this endorsement to your policy for protection during rideshare operations.
+
+SECTION 3: EXCLUSIONS AND LIMITATIONS
+
+3.1 General Exclusions
+The following are NOT covered under this policy:
+
+- Intentional damage caused by you or household members
+- Wear and tear, regular maintenance, or mechanical failures
+- Damage from racing or speed contests
+- Using your vehicle for commercial purposes (except for rideshare if endorsed)
+- Damage caused while driving under the influence of alcohol or drugs
+- Violations of traffic laws at the time of loss
+- Damage caused by nuclear reaction or radiation
+- Damage to custom equipment or aftermarket parts not specifically endorsed
+
+3.2 Collision Exclusions
+Collision coverage does NOT pay for:
+
+- Damage from hitting an animal (covered under comprehensive)
+- Damage from weather conditions alone (covered under comprehensive)
+- Damage from hitting a stationary object in a parking lot after leaving the scene (hit and run)
+- Mechanical or electrical breakdown
+
+SECTION 4: CLAIMS PROCEDURE
+
+4.1 Reporting Requirements
+You must report any accident or loss to us within 30 days of the incident. Failure to report 
+promptly may result in denial of your claim.
+
+Required Information:
+- Date, time, and location of accident
+- Description of what happened
+- Names and contact information of other parties involved
+- Contact information of any witnesses
+- Police report number (if applicable)
+- Photographs of damage (if safe to obtain)
+
+4.2 Claims Investigation
+We reserve the right to investigate any claim thoroughly. This may include:
+
+- Inspection of your vehicle by our adjusters
+- Review of medical records (for injury claims)
+- Obtaining statements from witnesses
+- Determining fault based on evidence collected
+
+4.3 Payment of Claims
+Once approved, we will pay the claim within 15 business days. Payment will be made to:
+
+- You (the policyholder), OR
+- You and the lienholder jointly (if there is an outstanding loan on your vehicle), OR
+- Directly to the repair shop (if authorized by you)
+
+================================================================================
+
+Document 2: HEALTH INSURANCE POLICY
+Document Name: health_policy.txt
+================================================================================
+
+SECTION 1: COVERAGE OVERVIEW
+
+1.1 Plan Summary
+This comprehensive health insurance policy provides coverage for preventive care, medical 
+services, prescription drugs, mental health services, and emergency care. Coverage includes 
+services provided by in-network and out-of-network providers.
+
+1.2 Individual Annual Deductible
+The individual annual deductible is $1,500. This means you must pay the first $1,500 of your 
+covered medical expenses each calendar year before insurance benefits begin.
+
+Special Note: 
+- Preventive care services (annual checkups, vaccinations, screenings) are covered at 100% 
+  regardless of deductible
+- The deductible resets on January 1st of each year
+- Once you meet your deductible, you pay only your coinsurance (percentage) for covered services
+
+1.3 Family Annual Deductible
+If you have family coverage, the family deductible is $3,000. Once any family member accumulates 
+$3,000 in individual deductibles, the entire family deductible is considered met.
+
+1.4 Out-of-Pocket Maximum
+The annual out-of-pocket maximum (including deductible and coinsurance) is $5,000 per individual 
+and $10,000 per family. Once you reach this limit, we pay 100% of covered services for the 
+remainder of the calendar year.
+
+SECTION 2: COVERED SERVICES
+
+2.1 Preventive Care Services (Covered at 100%)
+The following preventive care services are covered with no cost-sharing:
+
+- Annual physical examination
+- Preventive health screenings (cholesterol, blood pressure, diabetes screening)
+- Cancer screenings (mammography, colonoscopy, cervical cancer screening)
+- Immunizations and vaccinations
+- Prenatal and postnatal care
+- Well-child visits up to age 21
+- Mental health screening
+- Substance abuse screening
+
+2.2 Office Visits and Primary Care
+- In-network office visits: $30 copay per visit
+- Out-of-network office visits: $60 copay per visit after deductible
+- Urgent care visits: $50 copay
+- Emergency room visits: $300 copay (waived if admitted to hospital)
+
+2.3 Prescription Drug Coverage
+Prescription drugs are covered under a tiered formulary system:
+
+Tier 1 (Generic Drugs): $10 copay
+Tier 2 (Preferred Brand-Name): $30 copay
+Tier 3 (Non-Preferred Brand-Name): $50 copay
+Tier 4 (Specialty Drugs): 25% coinsurance with $150 minimum copay
+
+Note: Some medications require prior authorization before coverage is provided.
+
+2.4 Mental Health and Substance Abuse Services
+Mental health and substance abuse treatment is covered at parity with physical health services.
+
+Covered Services:
+- Inpatient mental health treatment: 60% coinsurance after deductible
+- Outpatient mental health visits: $30 copay per visit
+- Psychiatric medications: Covered under prescription drug benefits
+- Substance abuse counseling: $30 copay per visit
+- Inpatient substance abuse treatment: 60% coinsurance after deductible
+- Telehealth mental health visits: $20 copay per visit
+
+Maximum Benefits: Up to 30 outpatient visits per calendar year
+
+2.5 Hospitalization and Inpatient Services
+- Hospital admission copay: $300 per admission
+- Inpatient hospital care: 80% coinsurance after deductible
+- Surgical procedures: 80% coinsurance after deductible
+- Anesthesia: Covered as part of surgical procedure
+- Diagnostic imaging (X-ray, CT, MRI): $50 copay (in-network), 80% coinsurance (out-of-network)
+
+2.6 Maternity and Newborn Care
+Maternity and newborn care is fully covered with no cost-sharing:
+
+- Prenatal visits: Covered at 100%
+- Labor and delivery: 80% coinsurance after deductible
+- Postpartum care: Covered at 100%
+- Newborn screening and vaccinations: Covered at 100%
+- Breastfeeding support and counseling: Covered at 100%
+
+SECTION 3: EXCLUSIONS AND LIMITATIONS
+
+3.1 Services NOT Covered
+The following services are NOT covered under this policy:
+
+- Cosmetic procedures (unless medically necessary)
+- Weight loss programs and bariatric surgery (unless specifically authorized)
+- Fertility treatments and assisted reproductive procedures
+- Hair transplants
+- Routine dental and vision care (covered under separate riders if purchased)
+- Experimental or investigational treatments not approved by FDA
+- Services provided by non-licensed providers
+- Over-the-counter medications not prescribed by a physician
+
+3.2 Pre-Existing Condition Limitations
+Pre-existing conditions are covered from the first day of coverage. No waiting period applies 
+to treatment of pre-existing conditions.
+
+Definition: A pre-existing condition is any health condition diagnosed or treated within 
+12 months before your coverage starts.
+
+3.3 Mental Health Service Limitations
+- Annual visit limit: 30 outpatient visits per calendar year
+- Inpatient mental health treatment: Limited to 60 days per calendar year
+- Substance abuse treatment: Limited to 30 days inpatient or 40 outpatient visits per year
+
+SECTION 4: CLAIM SUBMISSION AND PAYMENT
+
+4.1 Filing Requirements
+Claims must be submitted within 180 days of the date of service. Claims submitted after 
+this deadline may be denied.
+
+Required Documentation:
+- Itemized bill from provider
+- Explanation of any procedures performed
+- Proof of payment
+- Medical records (if requested)
+
+4.2 Claim Decision Timeline
+- Clean claims: We will make a decision within 30 days of receipt
+- Claims requiring additional information: 45 days
+- Claims under dispute: 60 days
+
+4.3 Appeal Process
+If a claim is denied, you have the right to appeal within 180 days. The appeal will be reviewed 
+by a different physician than the original reviewer.
+
+================================================================================
+
+Document 3: HOMEOWNERS INSURANCE POLICY
+Document Name: home_policy.txt
+================================================================================
+
+SECTION 1: DWELLING AND STRUCTURE COVERAGE
+
+1.1 Dwelling Coverage Limit
+Dwelling coverage protects your home's structure against covered perils. The dwelling coverage 
+limit for this policy is $300,000.
+
+This includes protection for:
+- The main house structure
+- Attached structures (attached garage, deck, etc.)
+- Built-in fixtures and permanent installations
+- Roof and roof materials
+- Foundation and foundation materials
+
+1.2 Coverage for Additional Structures
+Additional structures on your property (detached garage, shed, pool house) are covered at 
+10% of the dwelling limit, or $30,000 in this case.
+
+This does NOT include:
+- Fences and gates
+- Underground structures
+- Structures used for business purposes
+
+SECTION 2: PERSONAL PROPERTY COVERAGE
+
+2.1 Personal Property Coverage Limit
+Personal property coverage protects your belongings inside and outside the home up to 70% 
+of dwelling coverage, or $210,000 in this case.
+
+Covered Items:
+- Furniture and furnishings
+- Clothing and personal items
+- Kitchen appliances
+- Electronics and computer equipment
+- Books, artwork, and collectibles
+- Lawn and garden equipment
+
+2.2 High-Value Item Coverage
+Certain items have sub-limits and may require scheduling:
+
+- Jewelry: Limited to $2,500 total
+- Furs: Limited to $2,500 total
+- Firearms: Limited to $2,500 total
+- Silverware and precious metals: Limited to $5,000 total
+- Fine arts and paintings: Limited to $5,000 total
+- Business equipment: Limited to $2,500 total
+
+To increase these limits, items must be scheduled separately on the policy with appraisals.
+
+SECTION 3: DEDUCTIBLES
+
+3.1 All-Peril Deductible
+The standard deductible for all covered perils is $1,000. This applies to each separate loss.
+
+3.2 Hurricane/Wind Deductible
+For wind and hail damage (including hurricane-related wind), a separate deductible of 5% 
+of dwelling coverage applies, which equals $15,000 on this policy.
+
+The 5% hurricane deductible is significantly higher than the standard deductible and applies 
+specifically to losses from:
+- Hurricane force winds (74+ mph)
+- Tornado damage
+- Hail damage
+- Wind damage
+
+3.3 Earthquake Deductible
+Earthquake damage is NOT included in standard homeowners coverage. A separate earthquake 
+insurance rider with a 15% deductible is available for an additional premium.
+
+SECTION 4: COVERED PERILS
+
+4.1 Standard Covered Perils
+This policy covers direct physical loss from the following perils:
+
+- Fire and smoke damage
+- Lightning and electrical damage
+- Explosion
+- Windstorm (excluding hurricane-force winds separately deductible)
+- Hail
+- Theft and burglary
+- Vandalism and malicious mischief
+- Falling objects
+- Weight of snow, ice, or sleet
+- Water damage (excluding flood and ground water)
+- Collapse of building
+- Glass breakage (windows and glass doors)
+
+4.2 EXCLUDED Perils - What is NOT Covered
+The following perils are specifically EXCLUDED from coverage:
+
+- Flood damage (requires separate flood insurance policy)
+- Groundwater or seepage
+- Earthquake and earth movement
+- War and civil unrest
+- Neglect and lack of maintenance
+- Settling, cracking, or shrinkage of the structure
+- Mold and fungus (with limited exception)
+- Damage from rodents, insects, or vermin
+- Damage from inherent defects
+- Damage from continuous or repeated water seepage
+- Nuclear hazard
+- Intentional loss caused by homeowner
+
+4.3 Flood Damage Exclusion - IMPORTANT
+Flood damage is NOT covered under standard homeowners insurance. Flood includes:
+
+- Water overflowing from rivers, lakes, or coastal areas
+- Water driven by storm surge
+- Accumulated water from heavy rain on ground level
+- Water backing up from sewers or drains
+
+To obtain flood coverage, you must purchase a separate National Flood Insurance Program (NFIP) 
+policy or private flood insurance policy.
+
+SECTION 5: LIABILITY COVERAGE
+
+5.1 Personal Liability Coverage
+Personal liability coverage protects you if someone is injured on your property or if you 
+accidentally damage someone else's property.
+
+Coverage Limit: $300,000 per occurrence
+This covers:
+- Medical expenses of injured visitors
+- Legal defense costs
+- Damages you are legally liable for
+- Pain and suffering of injured parties
+
+5.2 Medical Payments to Others
+Medical payments coverage pays for accidental injuries to others on your property, regardless 
+of fault. This is separate from liability and does not require proof of legal liability.
+
+Coverage Limit: $5,000 per person, per incident
+Covered Expenses:
+- Ambulance and emergency room care
+- Hospital stay
+- Surgical procedures
+- X-rays and diagnostic tests
+- Dental services
+- Funeral expenses (if injury is fatal)
+
+SECTION 6: CLAIMS PROCEDURE
+
+6.1 Duties After Loss
+You must take the following steps after any loss:
+
+1. Immediately notify us of any loss (ideally within 24 hours)
+2. Protect the property from further damage (mitigation)
+3. Cooperate fully with our investigation
+4. Provide accurate information about the loss
+5. Provide documentation and receipts
+6. Allow us to inspect the property and damages
+7. Provide police reports for theft or vandalism (within 30 days)
+
+Failure to comply with these duties may result in denial of your claim.
+
+6.2 Claim Settlement Options
+For covered losses, we will settle your claim using one of the following methods:
+
+Option 1: Replacement Cost
+We pay for the cost to replace damaged items with new items of similar quality. This is 
+the standard settlement method.
+
+Option 2: Actual Cash Value
+We pay for the current market value of damaged items, accounting for depreciation. This 
+results in lower payouts than replacement cost.
+
+Option 3: Repair Estimate
+For structural damage, we may pay based on the lowest competitive repair estimate obtained.
+
+6.3 Claim Timeline
+- Claim acknowledgment: Within 5 business days of notice
+- Claim decision: Within 30 days for simple claims, 60+ days for complex claims
+- Payment: Within 10 business days of claim approval
+
+SECTION 7: SPECIAL PROVISIONS
+
+7.1 Home Security Discount
+Homes with approved security systems (burglar alarm, fire alarm) qualify for a 10% discount 
+on the policy premium.
+
+7.2 Replacement Cost Endorsement
+This policy includes automatic replacement cost coverage for contents (not cash value). Your 
+personal property is covered for the full replacement cost, not depreciated value.
+
+7.3 Updated Replacement Cost
+The dwelling coverage limit automatically increases by 2% each year to account for inflation 
+and construction cost increases.
+
+================================================================================
+END OF SAMPLE POLICY DATA
+================================================================================

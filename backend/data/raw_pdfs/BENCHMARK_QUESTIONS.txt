@@ -1,0 +1,366 @@
+================================================================================
+BENCHMARK QUESTIONS FOR RAG INSURANCE DECISION ENGINE
+================================================================================
+
+AUTO INSURANCE QUESTIONS
+================================================================================
+
+Question 1: What is the bodily injury liability limit per person?
+Expected Document: auto_policy.txt
+Expected Answer: $25,000 per person, $50,000 per accident
+Difficulty: Easy
+Category: Coverage Limits
+
+Question 2: What is the collision coverage deductible?
+Expected Document: auto_policy.txt
+Expected Answer: Deductible options are $250, $500, or $1,000. Default is $500.
+Difficulty: Easy
+Category: Deductibles
+
+Question 3: Are rideshare services covered under the auto policy?
+Expected Document: auto_policy.txt
+Expected Answer: Standard auto insurance does not cover rideshare. You must add rideshare coverage endorsement.
+Difficulty: Medium
+Category: Coverage Types
+
+Question 4: What is the uninsured motorist coverage limit?
+Expected Document: auto_policy.txt
+Expected Answer: $15,000 per person, $30,000 per accident
+Difficulty: Easy
+Category: Coverage Limits
+
+Question 5: What medical expenses are covered under medical payments coverage?
+Expected Document: auto_policy.txt
+Expected Answer: Ambulance services, hospital room charges, surgical fees, X-rays, laboratory tests, dental services, funeral expenses
+Difficulty: Medium
+Category: Covered Services
+
+Question 6: What exclusions apply to collision coverage?
+Expected Document: auto_policy.txt
+Expected Answer: Hitting an animal, weather conditions, hit and run, mechanical or electrical breakdown
+Difficulty: Medium
+Category: Exclusions
+
+Question 7: How long do you have to report an accident to the insurance company?
+Expected Document: auto_policy.txt
+Expected Answer: 30 days from the incident
+Difficulty: Easy
+Category: Claims Process
+
+Question 8: What is the maximum coverage limit for collision coverage?
+Expected Document: auto_policy.txt
+Expected Answer: $50,000 per occurrence, $100,000 per policy year
+Difficulty: Medium
+Category: Coverage Limits
+
+Question 9: Does comprehensive coverage apply to theft and vandalism?
+Expected Document: auto_policy.txt
+Expected Answer: Yes, comprehensive coverage protects against theft, vandalism, natural disasters, and weather-related incidents
+Difficulty: Easy
+Category: Coverage Types
+
+Question 10: What is the claim payment timeline after approval?
+Expected Document: auto_policy.txt
+Expected Answer: Within 15 business days
+Difficulty: Easy
+Category: Claims Process
+
+================================================================================
+
+HEALTH INSURANCE QUESTIONS
+================================================================================
+
+Question 11: What is the individual annual deductible for health insurance?
+Expected Document: health_policy.txt
+Expected Answer: $1,500
+Difficulty: Easy
+Category: Deductibles
+
+Question 12: What is the family annual out-of-pocket maximum?
+Expected Document: health_policy.txt
+Expected Answer: $10,000 per family
+Difficulty: Easy
+Category: Out-of-Pocket Maximums
+
+Question 13: What prescription drug tiers are available?
+Expected Document: health_policy.txt
+Expected Answer: Tier 1 (Generic $10), Tier 2 (Preferred Brand $30), Tier 3 (Non-Preferred Brand $50), Tier 4 (Specialty 25% coinsurance)
+Difficulty: Medium
+Category: Prescription Coverage
+
+Question 14: How long does a member have to file a claim?
+Expected Document: health_policy.txt
+Expected Answer: Within 180 days of the date of service
+Difficulty: Easy
+Category: Claims Process
+
+Question 15: What mental health services are covered?
+Expected Document: health_policy.txt
+Expected Answer: Inpatient treatment, outpatient visits, psychiatric medications, substance abuse counseling, telehealth visits. Limited to 30 outpatient visits per year.
+Difficulty: Medium
+Category: Mental Health Coverage
+
+Question 16: What is the copay for office visits with in-network providers?
+Expected Document: health_policy.txt
+Expected Answer: $30 copay per visit
+Difficulty: Easy
+Category: Office Visits
+
+Question 17: Are pre-existing conditions covered?
+Expected Document: health_policy.txt
+Expected Answer: Yes, pre-existing conditions are covered from the first day of coverage with no waiting period
+Difficulty: Medium
+Category: Coverage Policy
+
+Question 18: What preventive care services are covered at 100%?
+Expected Document: health_policy.txt
+Expected Answer: Annual physical, preventive health screenings, cancer screenings, immunizations, prenatal/postnatal care, well-child visits, mental health screening, substance abuse screening
+Difficulty: Medium
+Category: Preventive Care
+
+Question 19: What is the emergency room visit copay?
+Expected Document: health_policy.txt
+Expected Answer: $300 copay (waived if admitted to hospital)
+Difficulty: Easy
+Category: Emergency Care
+
+Question 20: How long does the insurance company have to make a claim decision?
+Expected Document: health_policy.txt
+Expected Answer: 30 days for clean claims, 45 days if additional information needed, 60 days if under dispute
+Difficulty: Medium
+Category: Claims Process
+
+================================================================================
+
+HOMEOWNERS INSURANCE QUESTIONS
+================================================================================
+
+Question 21: What is the dwelling coverage limit?
+Expected Document: home_policy.txt
+Expected Answer: $300,000
+Difficulty: Easy
+Category: Coverage Limits
+
+Question 22: Is flood damage covered under the homeowners policy?
+Expected Document: home_policy.txt
+Expected Answer: No, flood damage is excluded. Separate flood insurance required.
+Difficulty: Medium
+Category: Exclusions
+
+Question 23: What is the wind and hail deductible?
+Expected Document: home_policy.txt
+Expected Answer: 5% of dwelling coverage, which is $15,000
+Difficulty: Medium
+Category: Deductibles
+
+Question 24: What are the duties of the insured after a loss?
+Expected Document: home_policy.txt
+Expected Answer: Notify immediately, protect property from further damage, cooperate with investigation, provide accurate information and documentation, allow inspection, provide police reports for theft/vandalism
+Difficulty: Medium
+Category: Claims Process
+
+Question 25: What is personal liability coverage limit?
+Expected Document: home_policy.txt
+Expected Answer: $300,000 per occurrence
+Difficulty: Easy
+Category: Liability Coverage
+
+Question 26: What items have sub-limits for coverage?
+Expected Document: home_policy.txt
+Expected Answer: Jewelry ($2,500), furs ($2,500), firearms ($2,500), silverware ($5,000), fine arts ($5,000), business equipment ($2,500)
+Difficulty: Hard
+Category: Coverage Limits
+
+Question 27: Is earthquake damage covered?
+Expected Document: home_policy.txt
+Expected Answer: No, earthquake damage is excluded from standard coverage. Separate earthquake rider available with 15% deductible.
+Difficulty: Medium
+Category: Exclusions
+
+Question 28: What is the standard all-peril deductible?
+Expected Document: home_policy.txt
+Expected Answer: $1,000 per loss
+Difficulty: Easy
+Category: Deductibles
+
+Question 29: What is medical payments coverage limit for others?
+Expected Document: home_policy.txt
+Expected Answer: $5,000 per person, per incident
+Difficulty: Easy
+Category: Liability Coverage
+
+Question 30: Does the policy include automatic replacement cost coverage?
+Expected Document: home_policy.txt
+Expected Answer: Yes, the policy includes replacement cost endorsement. Personal property covered for full replacement cost, not depreciated value.
+Difficulty: Medium
+Category: Coverage Options
+
+================================================================================
+
+MIXED/COMPLEX QUESTIONS (Require Cross-Document Understanding)
+================================================================================
+
+Question 31: Which insurance product has the highest individual annual deductible?
+Expected Documents: auto_policy.txt (collision/comprehensive $250-$1000), health_policy.txt ($1,500), home_policy.txt ($1,000)
+Expected Answer: Health insurance has the highest individual annual deductible at $1,500
+Difficulty: Hard
+Category: Comparison
+
+Question 32: Compare the liability coverage across all three policies
+Expected Documents: All three
+Expected Answer: Auto liability ($25,000-$50,000), Health liability (covered through medical payments), Home liability ($300,000)
+Difficulty: Hard
+Category: Comparison
+
+Question 33: In which policy would a theft be covered?
+Expected Documents: All three
+Expected Answer: Auto (collision/comprehensive), Home (theft/burglary specifically listed)
+Difficulty: Medium
+Category: Coverage Comparison
+
+Question 34: What is the average claim decision timeline across all policies?
+Expected Documents: All three (Auto 15 days, Health 30-60 days, Home 30-60 days)
+Expected Answer: Approximately 25-45 days depending on policy type
+Difficulty: Hard
+Category: Claims Process
+
+Question 35: Which policy has the most detailed exclusions list?
+Expected Documents: All three
+Expected Answer: Home policy has most comprehensive exclusions (flood, earthquake, mold, war, etc.)
+Difficulty: Hard
+Category: Policy Features
+
+================================================================================
+
+BEHAVIORAL/SCENARIO QUESTIONS (Test Reasoning)
+================================================================================
+
+Question 36: If you have a $1,500 deductible health insurance and a $300 emergency room bill, how much does the insurance cover?
+Expected Document: health_policy.txt
+Expected Answer: $0. Your claim of $300 is less than the $1,500 deductible, so you pay the full amount yourself.
+Difficulty: Hard
+Category: Calculation/Reasoning
+
+Question 37: Your house is damaged by a hurricane with wind speeds of 80 mph. What deductible applies?
+Expected Document: home_policy.txt
+Expected Answer: The 5% hurricane/wind deductible of $15,000 applies (not the standard $1,000 deductible)
+Difficulty: Hard
+Category: Scenario-Based
+
+Question 38: You live in a flood-prone area. Are you covered for flood damage?
+Expected Document: home_policy.txt
+Expected Answer: No, flood is excluded from homeowners policy. You need separate flood insurance.
+Difficulty: Medium
+Category: Scenario-Based
+
+Question 39: Your car is hit by an uninsured driver. What coverage helps?
+Expected Document: auto_policy.txt
+Expected Answer: Uninsured motorist coverage ($15,000 per person, $30,000 per accident)
+Difficulty: Medium
+Category: Scenario-Based
+
+Question 40: You schedule Uber drives occasionally. What must you do?
+Expected Document: auto_policy.txt
+Expected Answer: Add rideshare coverage endorsement to your auto policy. Standard coverage does not apply during rideshare operations.
+Difficulty: Medium
+Category: Scenario-Based
+
+================================================================================
+
+KNOWLEDGE VERIFICATION QUESTIONS
+================================================================================
+
+Question 41: What does "out-of-pocket maximum" mean in health insurance?
+Expected Document: health_policy.txt
+Expected Answer: The annual limit of money you have to spend on covered services before insurance pays 100%
+Difficulty: Easy
+Category: Definitions
+
+Question 42: What is coinsurance?
+Expected Document: health_policy.txt (mentions 80% coinsurance, 60% coinsurance)
+Expected Answer: Your share of costs for healthcare services after meeting deductible (e.g., you pay 20%, insurance pays 80%)
+Difficulty: Easy
+Category: Definitions
+
+Question 43: What does "sub-limit" mean?
+Expected Document: home_policy.txt
+Expected Answer: Lower coverage limit for specific items (e.g., jewelry limited to $2,500 even though total personal property limit is higher)
+Difficulty: Medium
+Category: Definitions
+
+Question 44: What is a "rider" or "endorsement"?
+Expected Document: auto_policy.txt, home_policy.txt
+Expected Answer: An addition to a standard insurance policy that modifies or extends coverage (e.g., rideshare endorsement, earthquake rider)
+Difficulty: Medium
+Category: Definitions
+
+Question 45: What is "prior authorization"?
+Expected Document: health_policy.txt
+Expected Answer: Insurance company approval required before a service or medication is covered
+Difficulty: Easy
+Category: Definitions
+
+================================================================================
+
+EDGE CASES AND TRICKY QUESTIONS
+================================================================================
+
+Question 46: If your emergency room visit results in hospital admission, do you pay the ER copay?
+Expected Document: health_policy.txt
+Expected Answer: No, the $300 emergency room copay is waived if you are admitted to the hospital
+Difficulty: Hard
+Category: Edge Cases
+
+Question 47: Does homeowners insurance cover fence damage?
+Expected Document: home_policy.txt
+Expected Answer: No, fences and gates are specifically not covered as additional structures
+Difficulty: Medium
+Category: Exclusions
+
+Question 48: If a guest is injured in your home, who pays their medical expenses?
+Expected Document: home_policy.txt
+Expected Answer: Medical payments to others coverage pays up to $5,000 per person regardless of fault
+Difficulty: Hard
+Category: Liability Coverage
+
+Question 49: Can you increase coverage for jewelry without scheduling it?
+Expected Document: home_policy.txt
+Expected Answer: No, high-value items like jewelry are limited to $2,500. To increase, items must be scheduled with appraisals.
+Difficulty: Hard
+Category: Coverage Limits
+
+Question 50: What happens if you don't report an auto accident within 30 days?
+Expected Document: auto_policy.txt
+Expected Answer: Your claim may be denied due to failure to report promptly
+Difficulty: Medium
+Category: Claims Requirements
+
+================================================================================
+END OF BENCHMARK QUESTIONS
+================================================================================
+
+QUESTION STATISTICS:
+- Total Questions: 50
+- Easy Questions: 15
+- Medium Questions: 21
+- Hard Questions: 14
+
+CATEGORY BREAKDOWN:
+- Coverage Limits: 12 questions
+- Deductibles: 8 questions
+- Claims Process: 8 questions
+- Exclusions: 7 questions
+- Coverage Types: 6 questions
+- Scenario-Based: 5 questions
+- Comparisons: 2 questions
+- Definitions: 5 questions
+- Edge Cases: 5 questions
+
+DOCUMENT DISTRIBUTION:
+- Auto Insurance only: 10 questions
+- Health Insurance only: 10 questions
+- Home Insurance only: 10 questions
+- Cross-document: 5 questions
+- Scenario-based (general): 15 questions
+
+================================================================================

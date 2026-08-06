@@ -1,0 +1,16 @@
+customer_id,customer_name,policy_number,insurance_type,claim_id,premium_amount,coverage_limit,deductible,status,risk_score,state,effective_date,expiry_date
+CUST001,Rajesh Kumar,POL-2024-HI-001,Health Insurance,,12500,500000,5000,Active,Low,Maharashtra,2024-01-15,2025-01-14
+CUST002,Priya Sharma,POL-2024-HI-002,Health Insurance,CLM-2024-001,15000,750000,7500,Active,Medium,Delhi,2024-03-01,2025-02-28
+CUST003,Anil Gupta,POL-2024-AU-001,Auto Insurance,,8500,300000,3000,Active,Low,Karnataka,2024-02-10,2025-02-09
+CUST004,Sunita Patel,POL-2024-HO-001,Home Insurance,,22000,2500000,15000,Active,Low,Gujarat,2024-04-01,2025-03-31
+CUST005,Vikram Singh,POL-2024-HI-003,Health Insurance,CLM-2024-002,18000,1000000,10000,Active,High,Rajasthan,2024-01-20,2025-01-19
+CUST006,Meera Nair,POL-2024-LI-001,Life Insurance,,30000,5000000,0,Active,Low,Kerala,2024-05-15,2044-05-14
+CUST007,Deepak Joshi,POL-2024-AU-002,Auto Insurance,CLM-2024-003,9200,400000,5000,Active,Medium,Maharashtra,2024-06-01,2025-05-31
+CUST008,Kavita Reddy,POL-2024-HI-004,Health Insurance,,14000,600000,6000,Lapsed,High,Telangana,2023-07-01,2024-06-30
+CUST009,Rohit Verma,POL-2024-HO-002,Home Insurance,,25000,3000000,20000,Active,Medium,Uttar Pradesh,2024-08-01,2025-07-31
+CUST010,Ananya Das,POL-2024-TR-001,Travel Insurance,,3500,200000,2000,Active,Low,West Bengal,2024-09-01,2024-12-31
+CUST011,Suresh Iyer,POL-2024-HI-005,Health Insurance,CLM-2024-004,16500,800000,8000,Under Review,Medium,Tamil Nadu,2024-01-10,2025-01-09
+CUST012,Fatima Begum,POL-2024-LI-002,Life Insurance,,45000,10000000,0,Active,Low,Andhra Pradesh,2024-02-20,2044-02-19
+CUST013,Arjun Menon,POL-2024-AU-003,Auto Insurance,,7800,250000,2500,Active,Low,Kerala,2024-03-15,2025-03-14
+CUST014,Pooja Bhatt,POL-2024-HI-006,Health Insurance,CLM-2024-005,13500,550000,5500,Claim Pending,High,Mumbai,2024-04-10,2025-04-09
+CUST015,Ravi Shankar,POL-2024-HO-003,Home Insurance,,28000,3500000,25000,Active,Medium,Karnataka,2024-05-01,2025-04-30

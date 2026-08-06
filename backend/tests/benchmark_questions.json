@@ -1,0 +1,17 @@
+[
+  {"question": "What is the bodily injury liability limit per person?", "expected_doc": "auto_policy.txt", "expected_keywords": ["$100,000", "bodily injury"]},
+  {"question": "What is the collision coverage deductible?", "expected_doc": "auto_policy.txt", "expected_keywords": ["$500", "collision"]},
+  {"question": "Are rideshare services covered under the auto policy?", "expected_doc": "auto_policy.txt", "expected_keywords": ["rideshare", "endorsement"]},
+  {"question": "What is the comprehensive coverage deductible?", "expected_doc": "auto_policy.txt", "expected_keywords": ["$250", "comprehensive"]},
+  {"question": "What is the individual annual deductible for health insurance?", "expected_doc": "health_policy.txt", "expected_keywords": ["$3,000", "deductible"]},
+  {"question": "What prescription drug tiers are available?", "expected_doc": "health_policy.txt", "expected_keywords": ["Tier 1", "Generic", "Specialty"]},
+  {"question": "How long does a member have to file a claim?", "expected_doc": "health_policy.txt", "expected_keywords": ["180 days"]},
+  {"question": "What mental health services are covered?", "expected_doc": "health_policy.txt", "expected_keywords": ["psychotherapy", "psychiatric", "substance"]},
+  {"question": "What is the out-of-pocket maximum for a family?", "expected_doc": "health_policy.txt", "expected_keywords": ["$17,400", "family"]},
+  {"question": "What is the dwelling coverage limit?", "expected_doc": "home_policy.txt", "expected_keywords": ["$450,000", "dwelling"]},
+  {"question": "Is flood damage covered under the homeowners policy?", "expected_doc": "home_policy.txt", "expected_keywords": ["flood", "not insure", "exclude"]},
+  {"question": "What is the wind and hail deductible?", "expected_doc": "home_policy.txt", "expected_keywords": ["2%", "$9,000", "wind"]},
+  {"question": "What are the duties of the insured after a loss?", "expected_doc": "home_policy.txt", "expected_keywords": ["notify", "protect", "cooperate"]},
+  {"question": "What is the personal liability limit per occurrence?", "expected_doc": "home_policy.txt", "expected_keywords": ["$300,000", "occurrence"]},
+  {"question": "What is the uninsured motorist coverage?", "expected_doc": "auto_policy.txt", "expected_keywords": ["uninsured", "compensatory damages"]}
+]
