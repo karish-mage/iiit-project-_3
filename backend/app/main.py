@@ -813,6 +813,17 @@ def get_analytics(db: Session = Depends(get_db)):
             "avg_final_score": round(float(row[5] or 0), 4),
         }
 
+    # Build strategy_summary (same shape as /evaluate endpoint) for frontend charts
+    strategy_summary = {}
+    for strategy, metrics in avg_metrics.items():
+        strategy_summary[strategy] = {
+            "avg_precision": metrics["avg_precision"],
+            "avg_recall": metrics["avg_recall"],
+            "avg_context_relevance": metrics["avg_context_relevance"],
+            "avg_response_time_ms": metrics["avg_response_time_ms"],
+            "avg_final_score": metrics["avg_final_score"],
+        }
+
     store = get_vector_store()
     domain_stats = store.get_domain_stats()
 
@@ -824,6 +835,7 @@ def get_analytics(db: Session = Depends(get_db)):
         strategy_win_rates=win_rates,
         avg_metrics_per_strategy=avg_metrics,
         domain_stats=domain_stats,
+        strategy_summary=strategy_summary,
     )
 
 
@@ -931,12 +943,34 @@ def get_stats(db: Session = Depends(get_db)):
     stats = store.get_collection_stats()
     total_chunks = sum(stats.values())
 
+    # Aggregate evaluation metrics across all runs
+    eval_agg = db.query(
+        func.avg(models.EvaluationResult.precision_at_k),
+        func.avg(models.EvaluationResult.recall_at_k),
+        func.avg(models.EvaluationResult.context_relevance),
+        func.avg(models.EvaluationResult.response_time_ms),
+        func.avg(models.EvaluationResult.final_score),
+    ).first()
+
+    avg_precision = float(eval_agg[0]) if eval_agg[0] is not None else 0.0
+    avg_recall = float(eval_agg[1]) if eval_agg[1] is not None else 0.0
+    avg_context_relevance = float(eval_agg[2]) if eval_agg[2] is not None else 0.0
+    avg_response_time_ms = float(eval_agg[3]) if eval_agg[3] is not None else 0.0
+    avg_accuracy = float(eval_agg[4]) if eval_agg[4] is not None else 0.0
+
     return StatsResponse(
         documents_indexed=docs_indexed,
         queries_answered=queries_answered,
         strategies_available=4,
         avg_confidence=round(avg_confidence, 1),
         total_chunks=total_chunks,
+        avg_accuracy=round(avg_accuracy, 4),
+        avg_precision=round(avg_precision, 4),
+        avg_recall=round(avg_recall, 4),
+        avg_context_relevance=round(avg_context_relevance, 4),
+        avg_response_time_ms=round(avg_response_time_ms, 2),
+        active_provider=settings.active_provider,
+        active_model=settings.active_model,
     )
 
 

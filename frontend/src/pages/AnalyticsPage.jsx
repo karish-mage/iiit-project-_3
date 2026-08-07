@@ -7,21 +7,21 @@ import {
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
-  PieChart, Pie, Cell, AreaChart, Area, Legend
+  PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { getAnalytics, runEvaluation } from '../services/api';
 
 const COLORS = {
-  fixed: '#3B82F6',
-  recursive: '#9D4EDF',
-  semantic: '#FFB703',
-  adaptive: '#00F0FF',
+  fixed: '#5B6EE8',
+  recursive: '#A78BFA',
+  semantic: '#E0AC4C',
+  adaptive: '#2FB8AA',
 };
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload) return null;
   return (
-    <div className="bg-[#070C1E] border border-white/10 rounded-xl p-3 text-xs font-mono shadow-2xl space-y-1">
+    <div className="bg-obsidian-900 border border-white/10 rounded-xl p-3 text-xs font-mono shadow-2xl space-y-1">
       <p className="text-slate-400 font-bold mb-1">{label}</p>
       {payload.map((p, i) => (
         <div key={i} className="flex items-center justify-between gap-4">
@@ -68,9 +68,9 @@ export default function AnalyticsPage() {
 
   const precisionData = getMetricChartData(evalResult || analytics, 'avg_precision');
   const recallData = getMetricChartData(evalResult || analytics, 'avg_recall');
-  const responseTimeData = getResponseTimeData();
+  const responseTimeData = getResponseTimeData(evalResult || analytics);
   const winRateData = getWinRateData(analytics);
-  const radarData = getRadarData();
+  const radarData = getRadarData(evalResult || analytics);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 space-y-8">
@@ -113,10 +113,10 @@ export default function AnalyticsPage() {
       {/* Metric Cards Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Documents Vault', value: analytics?.total_documents || 14, icon: Target, color: 'text-pink-400' },
-          { label: 'Queries Benchmark', value: analytics?.total_queries || 128, icon: TrendingUp, color: 'text-purple' },
-          { label: 'Grounding Precision', value: `${(analytics?.avg_confidence || 98.4).toFixed(1)}%`, icon: Trophy, color: 'text-emerald-400' },
-          { label: 'Avg Latency', value: '28.4 ms', icon: Clock, color: 'text-cyan' },
+          { label: 'Documents Vault', value: analytics?.total_documents ?? 0, icon: Target, color: 'text-pink-400' },
+          { label: 'Queries Benchmark', value: analytics?.total_queries ?? 0, icon: TrendingUp, color: 'text-purple' },
+          { label: 'Grounding Precision', value: `${((analytics?.avg_confidence ?? 0)).toFixed(1)}%`, icon: Trophy, color: 'text-emerald-400' },
+          { label: 'Avg Latency', value: `${getAvgLatency(analytics).toFixed(1)} ms`, icon: Clock, color: 'text-cyan' },
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -129,11 +129,27 @@ export default function AnalyticsPage() {
               <stat.icon className={`w-5 h-5 ${stat.color}`} />
               <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-white/5 text-slate-400">BENCH</span>
             </div>
-            <p className="text-2xl md:text-3xl font-black font-mono text-white">{stat.value}</p>
+            {loading ? (
+              <div className="skeleton h-8 w-24 rounded-lg" />
+            ) : (
+              <p className="text-2xl md:text-3xl font-black font-mono text-white">{stat.value}</p>
+            )}
             <p className="text-xs font-mono text-slate-400 uppercase mt-1">{stat.label}</p>
           </motion.div>
         ))}
       </div>
+
+      {/* Empty State Banner */}
+      {!loading && (!analytics?.strategy_summary || Object.keys(analytics?.strategy_summary || {}).length === 0) && (
+        <div className="glass-card p-8 text-center space-y-3">
+          <Activity className="w-10 h-10 text-slate-600 mx-auto" />
+          <h3 className="text-lg font-bold text-white">No Benchmark Data Yet</h3>
+          <p className="text-xs text-slate-400 max-w-md mx-auto font-mono">
+            Upload documents, ask questions, or click "Run Benchmark Suite" to generate evaluation metrics.
+            Charts will populate with real precision, recall, and latency data.
+          </p>
+        </div>
+      )}
 
       {/* Row 1: Precision@K and Recall@K Bar Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -149,7 +165,7 @@ export default function AnalyticsPage() {
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                 {precisionData.map((entry, i) => (
-                  <Cell key={i} fill={COLORS[entry.key] || '#00F0FF'} />
+                  <Cell key={i} fill={COLORS[entry.key] || '#5B6EE8'} />
                 ))}
               </Bar>
             </BarChart>
@@ -168,7 +184,7 @@ export default function AnalyticsPage() {
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                 {recallData.map((entry, i) => (
-                  <Cell key={i} fill={COLORS[entry.key] || '#9D4EDF'} />
+                  <Cell key={i} fill={COLORS[entry.key] || '#A78BFA'} />
                 ))}
               </Bar>
             </BarChart>
@@ -176,38 +192,24 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Row 2: Response Time Time Series & Strategy Win Rate Donut */}
+      {/* Row 2: Response Time Bar Chart & Strategy Win Rate Donut */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-card p-6 space-y-4">
           <h3 className="text-sm font-bold text-white font-mono flex items-center gap-2">
-            <Clock className="w-4 h-4 text-amber-400" /> Response Time (ms)
+            <Clock className="w-4 h-4 text-amber-400" /> Avg Response Time (ms)
           </h3>
           <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={responseTimeData}>
-              <defs>
-                {Object.entries(COLORS).map(([key, color]) => (
-                  <linearGradient key={key} id={`gradient-${key}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={color} stopOpacity={0.3} />
-                    <stop offset="95%" stopColor={color} stopOpacity={0} />
-                  </linearGradient>
-                ))}
-              </defs>
+            <BarChart data={responseTimeData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="name" tick={{ fill: '#94A3B8', fontSize: 10, fontFamily: 'monospace' }} />
+              <XAxis dataKey="name" tick={{ fill: '#94A3B8', fontSize: 11, fontFamily: 'monospace' }} />
               <YAxis tick={{ fill: '#94A3B8', fontSize: 10, fontFamily: 'monospace' }} />
               <Tooltip content={<CustomTooltip />} />
-              <Legend wrapperStyle={{ fontSize: 11, fontFamily: 'monospace', color: '#94A3B8' }} />
-              {Object.entries(COLORS).map(([key, color]) => (
-                <Area
-                  key={key}
-                  type="monotone"
-                  dataKey={key}
-                  stroke={color}
-                  fill={`url(#gradient-${key})`}
-                  strokeWidth={2}
-                />
-              ))}
-            </AreaChart>
+              <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                {responseTimeData.map((entry, i) => (
+                  <Cell key={i} fill={COLORS[entry.key] || '#5B6EE8'} />
+                ))}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </div>
 
@@ -228,7 +230,7 @@ export default function AnalyticsPage() {
                 label={({ name, value }) => `${name}: ${(value * 100).toFixed(0)}%`}
               >
                 {winRateData.map((entry, i) => (
-                  <Cell key={i} fill={COLORS[entry.key] || '#00F0FF'} />
+                  <Cell key={i} fill={COLORS[entry.key] || '#5B6EE8'} />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
@@ -312,21 +314,34 @@ function getMetricChartData(data, metricKey) {
     }));
   }
   return [
-    { name: 'Fixed', key: 'fixed', value: 0.74 },
-    { name: 'Recursive', key: 'recursive', value: 0.81 },
-    { name: 'Semantic', key: 'semantic', value: 0.86 },
-    { name: 'Adaptive', key: 'adaptive', value: 0.94 },
+    { name: 'Fixed', key: 'fixed', value: 0 },
+    { name: 'Recursive', key: 'recursive', value: 0 },
+    { name: 'Semantic', key: 'semantic', value: 0 },
+    { name: 'Adaptive', key: 'adaptive', value: 0 },
   ];
 }
 
-function getResponseTimeData() {
+function getResponseTimeData(data) {
+  if (data?.strategy_summary) {
+    return Object.entries(data.strategy_summary).map(([key, metrics]) => ({
+      name: key.charAt(0).toUpperCase() + key.slice(1),
+      key,
+      value: metrics.avg_response_time_ms || 0,
+    }));
+  }
   return Array.from({ length: 7 }, (_, i) => ({
     name: `Query #${i + 1}`,
-    fixed: 32 + Math.random() * 10,
-    recursive: 26 + Math.random() * 10,
-    semantic: 38 + Math.random() * 12,
-    adaptive: 29 + Math.random() * 10,
+    fixed: 0,
+    recursive: 0,
+    semantic: 0,
+    adaptive: 0,
   }));
+}
+
+function getAvgLatency(data) {
+  if (!data?.strategy_summary) return 0;
+  const values = Object.values(data.strategy_summary).map(m => m.avg_response_time_ms || 0);
+  return values.length ? values.reduce((a, b) => a + b, 0) / values.length : 0;
 }
 
 function getWinRateData(data) {
@@ -338,41 +353,50 @@ function getWinRateData(data) {
     }));
   }
   return [
-    { name: 'Adaptive', key: 'adaptive', value: 0.48 },
-    { name: 'Semantic', key: 'semantic', value: 0.26 },
-    { name: 'Recursive', key: 'recursive', value: 0.16 },
-    { name: 'Fixed', key: 'fixed', value: 0.10 },
+    { name: 'Adaptive', key: 'adaptive', value: 0 },
+    { name: 'Semantic', key: 'semantic', value: 0 },
+    { name: 'Recursive', key: 'recursive', value: 0 },
+    { name: 'Fixed', key: 'fixed', value: 0 },
   ];
 }
 
-function getRadarData() {
+function getRadarData(data) {
+  if (data?.strategy_summary) {
+    const strategies = Object.keys(data.strategy_summary);
+    const getMetric = (metricKey) => {
+      const row = { metric: metricKey };
+      strategies.forEach(s => { row[s] = data.strategy_summary[s][metricKey] || 0; });
+      return row;
+    };
+    return [
+      getMetric('avg_precision'),
+      getMetric('avg_recall'),
+      getMetric('avg_context_relevance'),
+      getMetric('avg_final_score'),
+    ];
+  }
   return [
-    { metric: 'Precision', fixed: 0.74, recursive: 0.81, semantic: 0.86, adaptive: 0.95 },
-    { metric: 'Recall', fixed: 0.70, recursive: 0.78, semantic: 0.84, adaptive: 0.92 },
-    { metric: 'Relevance', fixed: 0.68, recursive: 0.76, semantic: 0.83, adaptive: 0.91 },
-    { metric: 'Speed', fixed: 0.88, recursive: 0.92, semantic: 0.75, adaptive: 0.86 },
-    { metric: 'Consistency', fixed: 0.72, recursive: 0.80, semantic: 0.85, adaptive: 0.94 },
+    { metric: 'Precision', fixed: 0, recursive: 0, semantic: 0, adaptive: 0 },
+    { metric: 'Recall', fixed: 0, recursive: 0, semantic: 0, adaptive: 0 },
+    { metric: 'Relevance', fixed: 0, recursive: 0, semantic: 0, adaptive: 0 },
+    { metric: 'Final Score', fixed: 0, recursive: 0, semantic: 0, adaptive: 0 },
   ];
 }
 
 function getDemoAnalytics() {
   return {
-    total_documents: 14,
-    total_queries: 128,
-    avg_confidence: 98.4,
-    strategy_win_rates: { adaptive: 0.48, semantic: 0.26, recursive: 0.16, fixed: 0.10 },
+    total_documents: 0,
+    total_queries: 0,
+    avg_confidence: 0,
+    strategy_win_rates: {},
+    strategy_summary: {},
   };
 }
 
 function getDemoEvalResult() {
   return {
-    message: 'Evaluated 15 queries across 4 strategies',
-    total_queries: 15,
-    strategy_summary: {
-      fixed: { avg_precision: 0.74, avg_recall: 0.70, avg_context_relevance: 0.68, avg_response_time_ms: 32.5, avg_final_score: 0.71 },
-      recursive: { avg_precision: 0.81, avg_recall: 0.78, avg_context_relevance: 0.76, avg_response_time_ms: 26.2, avg_final_score: 0.78 },
-      semantic: { avg_precision: 0.86, avg_recall: 0.84, avg_context_relevance: 0.83, avg_response_time_ms: 38.4, avg_final_score: 0.84 },
-      adaptive: { avg_precision: 0.95, avg_recall: 0.92, avg_context_relevance: 0.91, avg_response_time_ms: 29.1, avg_final_score: 0.94 },
-    },
+    message: 'No evaluation data available',
+    total_queries: 0,
+    strategy_summary: {},
   };
 }

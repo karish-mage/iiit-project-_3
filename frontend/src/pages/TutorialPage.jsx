@@ -65,21 +65,14 @@ export default function TutorialPage() {
         transition={{ delay: 0.15 }}
         className="glass-card-neon p-3 rounded-3xl"
       >
-        <div className="relative w-full overflow-hidden rounded-2xl bg-[#070C1E] border border-white/10" style={{ paddingBottom: '48%' }}>
-          <iframe
-            className="absolute inset-0 w-full h-full"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-            title="Insurance Division — Walkthrough Tutorial"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        <div className="flex items-center justify-between px-4 py-3 text-slate-400 text-xs font-mono">
-          <span className="flex items-center gap-2">
-            <Play className="w-3.5 h-3.5 text-pink-400" /> Full System Demo Walkthrough Video
-          </span>
-          <span className="text-cyan">Duration: 4m 12s</span>
+        <div className="relative w-full overflow-hidden rounded-2xl bg-obsidian-900 border border-white/10 flex items-center justify-center" style={{ minHeight: '320px' }}>
+          <div className="text-center space-y-3">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple/20 border border-pink-500/30 flex items-center justify-center mx-auto">
+              <Play className="w-8 h-8 text-pink-400" />
+            </div>
+            <p className="text-sm font-bold text-white">System Demo Walkthrough</p>
+            <p className="text-xs text-slate-400 font-mono">Video coming soon</p>
+          </div>
         </div>
       </motion.div>
 

@@ -5,7 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Global Reset & Cyberpunk Background ──────────────── */
+/* ── Global Reset & Background ──────────────── */
 * {
   margin: 0;
   padding: 0;
@@ -14,17 +14,14 @@
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: #030712;
-  color: #F1F5F9;
+  background-color: #0A0D16;
+  color: #E2E5EC;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: 
-    radial-gradient(ellipse at 50% 0%, rgba(255, 42, 133, 0.12) 0%, transparent 65%),
-    radial-gradient(ellipse at 80% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
-    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    radial-gradient(ellipse at 50% 0%, rgba(91, 110, 232, 0.09) 0%, transparent 65%),
+    radial-gradient(ellipse at 80% 80%, rgba(47, 184, 170, 0.06) 0%, transparent 50%);
 }
 
 /* ── Scrollbar ───────────────────────────────────────── */
@@ -33,64 +30,63 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #030712;
+  background: #0A0D16;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #FF2A85 0%, #9D4EDF 50%, #00F0FF 100%);
+  background: rgba(91, 110, 232, 0.4);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00F0FF;
-  box-shadow: 0 0 10px #00F0FF;
+  background: rgba(91, 110, 232, 0.6);
 }
 
 /* ── Component Layer ─────────────────────────────────── */
 @layer components {
   /* Ultra-Glass Card */
   .glass-card {
-    @apply rounded-2xl border border-white/10 relative overflow-hidden;
-    background: rgba(13, 20, 40, 0.65);
+    @apply rounded-2xl border border-white/[0.08] relative overflow-hidden;
+    background: rgba(23, 28, 43, 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .glass-card:hover {
-    background: rgba(18, 26, 50, 0.78);
-    border-color: rgba(0, 240, 255, 0.3);
-    box-shadow: 0 12px 40px 0 rgba(0, 240, 255, 0.12), inset 0 0 20px rgba(0, 240, 255, 0.03);
+    background: rgba(28, 34, 52, 0.85);
+    border-color: rgba(91, 110, 232, 0.3);
+    box-shadow: 0 12px 40px 0 rgba(91, 110, 232, 0.1);
     transform: translateY(-2px);
   }
 
   .glass-card-static {
-    @apply rounded-2xl border border-white/10 relative overflow-hidden;
-    background: rgba(13, 20, 40, 0.65);
+    @apply rounded-2xl border border-white/[0.08] relative overflow-hidden;
+    background: rgba(23, 28, 43, 0.7);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
   }
 
-  /* Neon Glowing Card Border */
+  /* Accent Card Border */
   .glass-card-neon {
     @apply rounded-2xl border relative overflow-hidden;
-    border-color: rgba(255, 42, 133, 0.3);
-    background: linear-gradient(135deg, rgba(255, 42, 133, 0.05) 0%, rgba(0, 240, 255, 0.05) 100%), rgba(13, 20, 40, 0.7);
+    border-color: rgba(91, 110, 232, 0.3);
+    background: linear-gradient(135deg, rgba(91, 110, 232, 0.06) 0%, rgba(167, 139, 250, 0.05) 100%), rgba(23, 28, 43, 0.75);
     backdrop-filter: blur(20px);
-    box-shadow: 0 0 25px rgba(255, 42, 133, 0.15);
+    box-shadow: 0 4px 24px rgba(91, 110, 232, 0.1);
   }
 
-  /* Gradient button — pink/purple/cyan */
+  /* Gradient button — muted blue/violet */
   .btn-gradient {
     @apply px-6 py-2.5 rounded-xl font-semibold text-white text-sm relative overflow-hidden inline-flex items-center justify-center gap-2 cursor-pointer;
-    background: linear-gradient(135deg, #FF2A85 0%, #9D4EDF 50%, #00F0FF 100%);
+    background: linear-gradient(135deg, #5B6EE8 0%, #2FB8AA 100%);
     background-size: 200% 200%;
     transition: all 0.35s ease;
-    box-shadow: 0 4px 20px rgba(255, 42, 133, 0.35);
+    box-shadow: 0 4px 24px rgba(91, 110, 232, 0.3);
   }
   .btn-gradient:hover {
     background-position: 100% 0%;
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 240, 255, 0.45);
+    box-shadow: 0 6px 32px rgba(91, 110, 232, 0.4);
   }
   .btn-gradient:active {
     transform: translateY(0);
@@ -99,16 +95,16 @@ body {
   /* Ghost / outline button */
   .btn-ghost {
     @apply px-6 py-2.5 rounded-xl font-semibold text-sm inline-flex items-center justify-center gap-2 cursor-pointer;
-    border: 1px solid rgba(0, 240, 255, 0.4);
-    color: #00F0FF;
-    background: rgba(0, 240, 255, 0.03);
+    border: 1px solid rgba(47, 184, 170, 0.4);
+    color: #4FCEC0;
+    background: rgba(47, 184, 170, 0.06);
     backdrop-filter: blur(10px);
     transition: all 0.35s ease;
   }
   .btn-ghost:hover {
-    background: rgba(0, 240, 255, 0.12);
-    border-color: #00F0FF;
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+    background: rgba(47, 184, 170, 0.14);
+    border-color: #4FCEC0;
+    box-shadow: 0 2px 20px rgba(47, 184, 170, 0.18);
     transform: translateY(-2px);
   }
 
@@ -133,8 +129,8 @@ body {
   }
   .metric-card:hover {
     transform: translateY(-4px) scale(1.01);
-    border-color: rgba(255, 42, 133, 0.35);
-    box-shadow: 0 16px 40px rgba(255, 42, 133, 0.15);
+    border-color: rgba(91, 110, 232, 0.3);
+    box-shadow: 0 16px 40px rgba(91, 110, 232, 0.12);
   }
 
   /* Navbar link */
@@ -143,14 +139,13 @@ body {
     color: rgba(241, 245, 249, 0.65);
   }
   .nav-link:hover {
-    color: #00F0FF;
-    background: rgba(0, 240, 255, 0.08);
+    color: #4FCEC0;
+    background: rgba(47, 184, 170, 0.08);
   }
   .nav-link.active {
-    color: #FF2A85;
-    background: rgba(255, 42, 133, 0.12);
-    border: 1px solid rgba(255, 42, 133, 0.3);
-    box-shadow: 0 0 15px rgba(255, 42, 133, 0.2);
+    color: #8D9CF0;
+    background: rgba(91, 110, 232, 0.14);
+    border: 1px solid rgba(91, 110, 232, 0.3);
   }
 
   /* Feature card */
@@ -160,8 +155,8 @@ body {
   }
   .feature-card:hover {
     transform: translateY(-8px);
-    border-color: rgba(0, 240, 255, 0.4);
-    box-shadow: 0 24px 60px rgba(0, 240, 255, 0.18);
+    border-color: rgba(91, 110, 232, 0.35);
+    box-shadow: 0 24px 60px rgba(91, 110, 232, 0.14);
   }
 
   /* Step card */
@@ -170,7 +165,7 @@ body {
   }
   .step-card .step-number {
     @apply text-6xl font-black font-mono tracking-tighter;
-    background: linear-gradient(135deg, #FF2A85, #9D4EDF, #00F0FF);
+    background: linear-gradient(135deg, #2FB8AA, #A78BFA, #5B6EE8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     opacity: 0.4;
@@ -184,8 +179,8 @@ body {
   height: 650px;
   border-radius: 50%;
   filter: blur(140px);
-  opacity: 0.35;
-  background: linear-gradient(135deg, #FF2A85, #9D4EDF, #00F0FF);
+  opacity: 0.22;
+  background: linear-gradient(135deg, #2FB8AA, #A78BFA, #5B6EE8);
   animation: blob 9s infinite;
   pointer-events: none;
 }
@@ -196,29 +191,29 @@ body {
   height: 450px;
   border-radius: 50%;
   filter: blur(110px);
-  opacity: 0.22;
-  background: linear-gradient(135deg, #00F0FF, #9D4EDF);
+  opacity: 0.16;
+  background: linear-gradient(135deg, #5B6EE8, #A78BFA);
   animation: blob 8s infinite reverse;
   pointer-events: none;
 }
 
 /* ── Gradient Text ───────────────────────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #FF2A85 0%, #9D4EDF 45%, #00F0FF 100%);
+  background: linear-gradient(135deg, #2FB8AA 0%, #A78BFA 45%, #5B6EE8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-pink {
-  background: linear-gradient(135deg, #FF2A85 0%, #9D4EDF 100%);
+  background: linear-gradient(135deg, #5B6EE8 0%, #A78BFA 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-cyan {
-  background: linear-gradient(135deg, #00F0FF 0%, #9D4EDF 100%);
+  background: linear-gradient(135deg, #2FB8AA 0%, #A78BFA 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -234,7 +229,7 @@ body {
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.04) 25%,
-    rgba(0, 240, 255, 0.1) 50%,
+    rgba(91, 110, 232, 0.1) 50%,
     rgba(255, 255, 255, 0.04) 75%
   );
   background-size: 200% 100%;
@@ -244,5 +239,5 @@ body {
 
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 42, 133, 0.4), rgba(0, 240, 255, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(91, 110, 232, 0.25), rgba(167, 139, 250, 0.25), transparent);
 }

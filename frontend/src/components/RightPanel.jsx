@@ -1,47 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import {
   Activity, Cpu, HardDrive, Gauge, ShieldCheck, AlertTriangle,
-  Database, Wifi, Server, Clock, Zap
+  Database, Server, Clock, Zap
 } from 'lucide-react';
-
-const nodeGrid = Array.from({ length: 12 }, (_, i) => ({
-  id: `N-${String(i + 1).padStart(2, '0')}`,
-  status: i === 7 ? 'error' : i === 3 ? 'warning' : 'active',
-}));
+import { getStats } from '../services/api';
 
 export default function RightPanel() {
-  const [metrics, setMetrics] = useState({
-    accuracy: 99.2,
-    processingTime: 720,
-    retrievalPrecision: 98.8,
-    fraudScore: 97.4,
-    hallucinationRisk: 0.01,
-    gpuUsage: 58.4,
-    tokensPerSec: 148,
-    activeSessions: 52,
-    uptime: 99.99,
-  });
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [online, setOnline] = useState(true);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setMetrics(prev => ({
-        ...prev,
-        accuracy: +(prev.accuracy + (Math.random() - 0.5) * 0.1).toFixed(1),
-        processingTime: Math.max(450, Math.min(1000, prev.processingTime + Math.floor((Math.random() - 0.5) * 20))),
-        tokensPerSec: Math.max(120, Math.min(180, prev.tokensPerSec + Math.floor((Math.random() - 0.5) * 5))),
-        activeSessions: Math.max(40, Math.min(70, prev.activeSessions + Math.floor((Math.random() - 0.5) * 2))),
-        gpuUsage: +(prev.gpuUsage + (Math.random() - 0.5) * 0.4).toFixed(1),
-      }));
-    }, 2000);
+    loadStats();
+    const interval = setInterval(loadStats, 10000);
     return () => clearInterval(interval);
   }, []);
 
+  const loadStats = async () => {
+    try {
+      const res = await getStats();
+      setStats(res.data);
+      setOnline(true);
+    } catch (e) {
+      setStats(null);
+      setOnline(false);
+    }
+    setLoading(false);
+  };
+
+  const hasQueries = (stats?.queries_answered ?? 0) > 0;
+  const retrievalBarWidth = hasQueries ? Math.max(0, 100 - (stats?.avg_response_time_ms ?? 0) / 5) : 0;
+
   return (
-    <aside className="w-80 h-full border-l border-white/10 bg-[#070C1E]/80 backdrop-blur-2xl overflow-y-auto flex-shrink-0 hidden xl:block z-30">
-      <div className="p-4 space-y-5">
+    <aside className="w-72 h-full ml-2 border-l border-white/10 bg-obsidian-900/80 backdrop-blur-2xl overflow-y-auto flex-shrink-0 hidden xl:block z-30">
+      <div className="p-3 space-y-4">
         {/* System Health Header */}
         <div>
-          <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono mb-3 flex items-center justify-between">
+          <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono mb-2.5 flex items-center justify-between">
             <span className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-cyan" />
               Live Telemetry
@@ -51,67 +46,56 @@ export default function RightPanel() {
             </span>
           </h3>
 
-          <div className="space-y-2.5">
-            <MetricRow icon={ShieldCheck} label="AI Precision" value={`${metrics.accuracy}%`} color="text-emerald-400" barWidth={metrics.accuracy} />
-            <MetricRow icon={Clock} label="Retrieval Time" value={`${metrics.processingTime}ms`} color="text-cyan" barWidth={100 - metrics.processingTime / 12} />
-            <MetricRow icon={Gauge} label="Context Relevance" value={`${metrics.retrievalPrecision}%`} color="text-pink-400" barWidth={metrics.retrievalPrecision} />
-            <MetricRow icon={ShieldCheck} label="Grounding Verifier" value={`${metrics.fraudScore}%`} color="text-purple" barWidth={metrics.fraudScore} />
-            <MetricRow icon={AlertTriangle} label="Hallucination Risk" value={`${metrics.hallucinationRisk}`} color="text-emerald-400" barWidth={(1 - metrics.hallucinationRisk) * 100} indicator="SAFE" />
+          <div className="space-y-2">
+            <MetricRow icon={ShieldCheck} label="AI Precision" value={loading ? '...' : `${((stats?.avg_accuracy ?? 0) * 100).toFixed(1)}%`} color="text-emerald-400" barWidth={(stats?.avg_accuracy ?? 0) * 100} />
+            <MetricRow icon={Clock} label="Retrieval Time" value={loading ? '...' : hasQueries ? `${(stats?.avg_response_time_ms ?? 0).toFixed(0)}ms` : 'No data'} color="text-cyan" barWidth={retrievalBarWidth} />
+            <MetricRow icon={Gauge} label="Context Relevance" value={loading ? '...' : `${((stats?.avg_context_relevance ?? 0) * 100).toFixed(1)}%`} color="text-pink-400" barWidth={(stats?.avg_context_relevance ?? 0) * 100} />
+            <MetricRow icon={ShieldCheck} label="Grounding Verifier" value={loading ? '...' : `${(stats?.avg_confidence ?? 0).toFixed(1)}%`} color="text-purple" barWidth={stats?.avg_confidence ?? 0} />
+            <MetricRow icon={AlertTriangle} label="Avg Precision" value={loading ? '...' : `${((stats?.avg_precision ?? 0) * 100).toFixed(1)}%`} color="text-amber-400" barWidth={(stats?.avg_precision ?? 0) * 100} />
           </div>
         </div>
 
-        {/* Neural Node Status */}
-        <div className="glass-card p-4">
-          <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono mb-3 flex items-center gap-2">
+        {/* System Status */}
+        <div className="glass-card p-3">
+          <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono mb-2.5 flex items-center gap-2">
             <Server className="w-4 h-4 text-purple" />
-            Neural Cluster Matrix
+            System Status
           </h3>
-          <div className="grid grid-cols-4 gap-1.5">
-            {nodeGrid.map(node => (
-              <div
-                key={node.id}
-                className={`h-9 rounded-lg flex items-center justify-center text-[10px] font-mono font-bold cursor-pointer transition-all hover:scale-105 border ${
-                  node.status === 'active'
-                    ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan'
-                    : node.status === 'warning'
-                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-                    : 'bg-red-500/10 border-red-500/30 text-red-400 animate-pulse'
-                }`}
-              >
-                {node.id.split('-')[1]}
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-between mt-3 text-[10px] text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-cyan" /> Ready</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-400" /> High Load</span>
-            <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-400" /> Offline</span>
+          <div className="flex items-center gap-4 text-[11px] font-mono">
+            <span className="flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full ${online ? 'bg-cyan animate-pulse' : 'bg-red-400'}`} />
+              <span className={online ? 'text-cyan' : 'text-red-400'}>{online ? 'Backend Online' : 'Backend Offline'}</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full ${hasQueries ? 'bg-emerald-400' : 'bg-slate-600'}`} />
+              <span className={hasQueries ? 'text-emerald-400' : 'text-slate-500'}>{hasQueries ? 'Data Flowing' : 'Awaiting Data'}</span>
+            </span>
           </div>
         </div>
 
         {/* System Architecture */}
-        <div className="glass-card p-4">
-          <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono mb-3 flex items-center gap-2">
+        <div className="glass-card p-3">
+          <h3 className="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono mb-2.5 flex items-center gap-2">
             <Cpu className="w-4 h-4 text-pink-400" />
             Active Stack
           </h3>
-          <div className="space-y-2 text-xs">
+          <div className="space-y-1.5 text-xs">
             <InfoRow label="RAG Pipelines" value="Fixed, Recursive, Semantic, Adaptive" />
             <InfoRow label="Vector Engine" value="ChromaDB v0.4" />
             <InfoRow label="Embeddings" value="all-MiniLM-L6-v2" />
-            <InfoRow label="LLM Generator" value="Google Gemini 1.5 Pro" />
-            <InfoRow label="Context Limit" value="1,000,000 Tokens" />
-            <InfoRow label="System Latency" value="1.8ms" highlight />
+            <InfoRow label="LLM Generator" value={loading ? '...' : (stats?.active_model || 'Not configured')} />
+            <InfoRow label="LLM Provider" value={loading ? '...' : (stats?.active_provider || 'none')} />
+            <InfoRow label="Avg Latency" value={loading ? '...' : hasQueries ? `${(stats?.avg_response_time_ms ?? 0).toFixed(1)}ms` : 'N/A'} highlight />
           </div>
         </div>
 
         {/* Live Counters */}
-        <div className="glass-card p-4">
-          <div className="grid grid-cols-2 gap-3">
-            <StatBox icon={HardDrive} label="GPU VRAM" value={`${metrics.gpuUsage} GB`} color="text-pink-400" />
-            <StatBox icon={Zap} label="Tokens / Sec" value={`${metrics.tokensPerSec}`} color="text-cyan" />
-            <StatBox icon={Wifi} label="Active Threads" value={`${metrics.activeSessions}`} color="text-purple" />
-            <StatBox icon={Database} label="Indexed Embeddings" value="184K" color="text-emerald-400" />
+        <div className="glass-card p-3">
+          <div className="grid grid-cols-2 gap-2.5">
+            <StatBox icon={Database} label="Docs Indexed" value={loading ? '...' : (stats?.documents_indexed ?? 0)} color="text-emerald-400" />
+            <StatBox icon={Activity} label="Queries Answered" value={loading ? '...' : (stats?.queries_answered ?? 0)} color="text-cyan" />
+            <StatBox icon={HardDrive} label="Total Chunks" value={loading ? '...' : (stats?.total_chunks ?? 0)} color="text-pink-400" />
+            <StatBox icon={Zap} label="Strategies" value={loading ? '...' : (stats?.strategies_available ?? 4)} color="text-purple" />
           </div>
         </div>
       </div>
@@ -121,7 +105,7 @@ export default function RightPanel() {
 
 function MetricRow({ icon: Icon, label, value, color, barWidth, indicator }) {
   return (
-    <div className="glass-card p-3 hover:border-cyan/30 transition-all group">
+    <div className="glass-card p-2.5 hover:border-cyan/30 transition-all group">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Icon className={`w-4 h-4 ${color}`} />

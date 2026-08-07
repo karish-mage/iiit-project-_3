@@ -23,7 +23,7 @@ export default function QueryPage() {
   const [useLlmJudge, setUseLlmJudge] = useState(false);
   const [useStreaming, setUseStreaming] = useState(true);
   const [copied, setCopied] = useState(false);
-  const [sessionId] = useState(() => `session_${Date.now()}`);
+  const [sessionId] = useState(() => `session_${Date.now().toString(36)}`);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -56,12 +56,12 @@ export default function QueryPage() {
             const entry = {
               query: q,
               answer: fullText,
-              strategy_used: metadata?.strategy_used || 'adaptive',
-              confidence_score: metadata?.confidence_score || 94,
-              supporting_clauses: metadata?.supporting_clauses || ['Clause 14.2', 'Section 8.1'],
-              supporting_pages: metadata?.supporting_pages || [4, 7],
+              strategy_used: metadata?.strategy_used || 'N/A',
+              confidence_score: metadata?.confidence_score || 0,
+              supporting_clauses: metadata?.supporting_clauses || [],
+              supporting_pages: metadata?.supporting_pages || [],
               unsupported_claims: metadata?.unsupported_claims || [],
-              strategy_scores: metadata?.strategy_scores || { adaptive: 0.94, semantic: 0.86, recursive: 0.78, fixed: 0.71 },
+              strategy_scores: metadata?.strategy_scores || {},
               sources: metadata?.sources || [],
             };
             setResult(entry);
@@ -144,82 +144,89 @@ export default function QueryPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10 space-y-6">
-      {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan text-xs font-mono font-bold mb-1">
-            <Bot className="w-3.5 h-3.5" /> REALTIME RAG ASSISTANT
+    <div className="h-full max-w-6xl mx-auto px-4 sm:px-6 py-2 flex flex-col gap-2 overflow-hidden">
+      {/* Top Panel — thin single row */}
+      <div className="flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-pink-500/20 to-purple/20 border border-pink-500/30 flex items-center justify-center">
+            <Bot className="w-4 h-4 text-pink-400" />
           </div>
-          <h1 className="text-3xl font-black text-white flex items-center gap-3">
-            AI Policy Decision Console
-          </h1>
+          <h1 className="text-sm font-black text-white">AI Policy Console</h1>
         </div>
-
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setUseStreaming(!useStreaming)}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all border ${
+            className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-mono font-bold transition-all border ${
               useStreaming
-                ? 'bg-pink-500/15 text-pink-400 border-pink-500/30 shadow-glow-pink'
+                ? 'bg-pink-500/15 text-pink-400 border-pink-500/30'
                 : 'bg-white/5 text-slate-400 border-white/10'
             }`}
           >
-            <Zap className="w-3.5 h-3.5" />
-            {useStreaming ? 'SSE Streaming: ON' : 'Streaming: OFF'}
+            <Zap className="w-2.5 h-2.5" />
+            {useStreaming ? 'SSE' : 'STD'}
           </button>
-
           {history.length > 0 && (
             <button
               onClick={clearHistory}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-white/5 text-slate-400 border border-white/10 hover:border-red-500/30 hover:text-red-400 transition-all"
+              className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-mono font-bold bg-white/5 text-slate-400 border border-white/10 hover:border-red-500/30 hover:text-red-400 transition-all"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Reset Console
+              <RotateCcw className="w-2.5 h-2.5" />
+              Clear
             </button>
           )}
         </div>
       </div>
 
-      {/* Main Chat Stream Container */}
-      <div className="glass-card p-6 min-h-[440px] max-h-[620px] overflow-y-auto flex flex-col gap-5">
+      {/* Main Chat Stream Container — maximized, only this scrolls */}
+      <div className="glass-card p-4 flex-1 min-h-0 overflow-y-auto flex flex-col gap-4">
         {history.length === 0 && !isStreaming && !loading && (
-          <div className="flex-1 flex flex-col items-center justify-center text-center py-12 space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 via-purple/20 to-cyan/20 border border-pink-500/30 flex items-center justify-center shadow-glow-pink">
-              <Bot className="w-8 h-8 text-pink-400" />
+          <div className="flex-1 flex flex-col items-center justify-center text-center py-6">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500/20 via-purple/20 to-cyan/20 border border-pink-500/30 flex items-center justify-center shadow-glow-pink mb-4">
+              <Bot className="w-7 h-7 text-pink-400" />
             </div>
-            <div>
-              <h3 className="text-xl font-bold text-white mb-1">Insurance Knowledge Grounding Engine</h3>
-              <p className="text-xs text-slate-400 max-w-md font-mono">
-                Ask any complex coverage question. The engine runs 4 parallel chunking strategy evaluations in real-time.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2 justify-center max-w-xl">
+            <h3 className="text-lg font-bold text-white mb-1">Insurance Knowledge Grounding Engine</h3>
+            <p className="text-xs text-slate-400 max-w-md font-mono mb-6">
+              Ask any complex coverage question. The engine runs 4 parallel chunking strategy evaluations in real-time.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full">
               {[
-                'What is the collision deductible limit?',
-                'Are pre-existing condition claims covered?',
-                'What is the maximum reimbursement for water damage?',
-                'What is the policy cancellation grace period?',
-              ].map((q) => (
+                { cat: 'Deductibles', q: 'What is the collision deductible limit?', icon: Shield },
+                { cat: 'Coverage', q: 'Are pre-existing condition claims covered?', icon: FileText },
+                { cat: 'Claims', q: 'What is the maximum reimbursement for water damage?', icon: AlertTriangle },
+                { cat: 'Policy Terms', q: 'What is the policy cancellation grace period?', icon: CheckCircle2 },
+              ].map(({ cat, q, icon: Icon }) => (
                 <button
                   key={q}
                   onClick={() => setQuery(q)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-mono text-cyan bg-cyan-500/10 border border-cyan-500/20 hover:bg-cyan-500/20 hover:scale-105 transition-all"
+                  className="flex items-start gap-3 p-3.5 rounded-xl text-left bg-white/[0.03] border border-white/10 hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all group"
                 >
-                  "{q}"
+                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                    <Icon className="w-4 h-4 text-cyan" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-mono uppercase text-slate-500 tracking-wider mb-0.5">{cat}</p>
+                    <p className="text-xs text-slate-300 font-medium leading-snug">{q}</p>
+                  </div>
                 </button>
               ))}
+            </div>
+
+            <div className="flex items-center gap-4 mt-6 text-[10px] font-mono text-slate-500">
+              <span className="flex items-center gap-1.5"><Zap className="w-3 h-3 text-pink-400" /> SSE Streaming</span>
+              <span className="flex items-center gap-1.5"><Shield className="w-3 h-3 text-cyan" /> Evidence Grounded</span>
+              <span className="flex items-center gap-1.5"><Sparkles className="w-3 h-3 text-purple" /> 4-Strategy Vote</span>
             </div>
           </div>
         )}
 
         {/* Previous Message Exchanges */}
         {[...history].reverse().map((entry, i) => (
-          <div key={i} className="space-y-4">
+          <div key={i} className="space-y-3">
             {/* User Bubble */}
             <div className="flex justify-end">
               <div className="flex items-start gap-2.5 max-w-[80%]">
-                <div className="px-5 py-3 rounded-2xl rounded-tr-xs bg-gradient-to-r from-pink-500 to-purple text-white text-sm font-medium shadow-glow-pink">
+                <div className="px-4 py-2.5 rounded-2xl rounded-tr-xs bg-gradient-to-r from-pink-500 to-purple text-white text-sm font-medium shadow-glow-pink">
                   {entry.query}
                 </div>
                 <div className="w-8 h-8 rounded-xl bg-pink-500/20 border border-pink-500/30 flex items-center justify-center flex-shrink-0">
@@ -234,16 +241,16 @@ export default function QueryPage() {
                 <div className="w-8 h-8 rounded-xl bg-purple/20 border border-purple/30 flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4 text-purple" />
                 </div>
-                <div className="px-5 py-4 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-white/10 space-y-3">
+                <div className="px-4 py-3 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-white/10 space-y-2">
                   <p className="text-slate-200 text-sm whitespace-pre-wrap leading-relaxed">{entry.answer}</p>
-                  
-                  <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-white/5 font-mono text-xs">
+
+                  <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-white/5 font-mono text-[11px]">
                     <span className={`font-bold ${confidenceColor(entry.confidence_score)}`}>
-                      ★ Grounding Score: {Math.round(entry.confidence_score)}%
+                      ★ {Math.round(entry.confidence_score)}%
                     </span>
                     <span className="text-slate-600">•</span>
                     <span className="text-cyan font-semibold uppercase">
-                      Winner: {entry.strategy_used}
+                      {entry.strategy_used}
                     </span>
                     {entry.supporting_clauses?.length > 0 && (
                       <>
@@ -267,10 +274,10 @@ export default function QueryPage() {
               <div className="w-8 h-8 rounded-xl bg-purple/20 border border-purple/30 flex items-center justify-center flex-shrink-0">
                 <Bot className="w-4 h-4 text-pink-400 animate-pulse" />
               </div>
-              <div className="px-5 py-4 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-pink-500/30 space-y-2 shadow-glow-pink">
+              <div className="px-4 py-3 rounded-2xl rounded-tl-xs bg-white/[0.04] border border-pink-500/30 space-y-2 shadow-glow-pink">
                 <p className="text-slate-200 text-sm whitespace-pre-wrap leading-relaxed">{streamingText}</p>
-                <div className="flex items-center gap-2 pt-2 text-xs font-mono text-pink-400">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <div className="flex items-center gap-2 pt-1 text-[11px] font-mono text-pink-400">
+                  <Loader2 className="w-3 h-3 animate-spin" />
                   Streaming verified evidence answer...
                 </div>
               </div>
@@ -284,7 +291,7 @@ export default function QueryPage() {
               <div className="w-8 h-8 rounded-xl bg-purple/20 border border-purple/30 flex items-center justify-center">
                 <Bot className="w-4 h-4 text-purple animate-pulse" />
               </div>
-              <div className="px-5 py-4 rounded-2xl bg-white/[0.04] border border-white/10">
+              <div className="px-4 py-3 rounded-2xl bg-white/[0.04] border border-white/10">
                 <div className="flex items-center gap-3">
                   <Loader2 className="w-4 h-4 text-cyan animate-spin" />
                   <span className="text-xs font-mono text-slate-300">
@@ -299,128 +306,143 @@ export default function QueryPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Result Metrics & Grounding Details Panel */}
+      {/* Verification Slim Bar — collapsed by default, click to expand full details */}
       <AnimatePresence>
         {result && (
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            className="glass-card-neon p-6 space-y-5"
+            exit={{ opacity: 0, y: -10 }}
+            className="glass-card-neon flex-shrink-0 overflow-hidden"
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2 font-mono">
-                <Shield className="w-4 h-4 text-cyan" />
-                VERIFICATION &amp; EVIDENCE BREAKDOWN
-              </h3>
+            {/* Slim Summary Bar — always visible */}
+            <div className="flex items-center justify-between px-4 py-2.5 cursor-pointer" onClick={() => setShowEvidence(!showEvidence)}>
+              <div className="flex items-center gap-4 text-[11px] font-mono">
+                <span className={`font-bold ${confidenceColor(result.confidence_score)}`}>
+                  ★ {Math.round(result.confidence_score)}%
+                </span>
+                <span className="text-slate-600">•</span>
+                <span className="text-cyan font-semibold capitalize">{result.strategy_used}</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-pink-400">
+                  {result.supporting_pages?.length ? `Pg ${result.supporting_pages.join(',')}` : 'No pages'}
+                </span>
+                <span className="text-slate-600">•</span>
+                <span className="text-purple">{result.supporting_clauses?.length || 0} clauses</span>
+                {result.unsupported_claims?.length > 0 && (
+                  <>
+                    <span className="text-slate-600">•</span>
+                    <span className="text-red-400 font-bold">{result.unsupported_claims.length} unsupported</span>
+                  </>
+                )}
+              </div>
+
               <div className="flex items-center gap-2">
                 <button
-                  onClick={handleCopy}
-                  className="px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-mono text-slate-300 flex items-center gap-1.5"
+                  onClick={(e) => { e.stopPropagation(); handleCopy(); }}
+                  className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-[11px] font-mono text-slate-300 flex items-center gap-1.5"
                 >
-                  {copied ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
-                  {copied ? 'Copied' : 'Copy Answer'}
+                  {copied ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-slate-400" />}
+                  {copied ? 'Copied' : 'Copy'}
                 </button>
-
                 <button
-                  onClick={() => setShowEvidence(!showEvidence)}
-                  className="px-3 py-1.5 rounded-xl bg-pink-500/15 border border-pink-500/30 text-xs font-mono text-pink-400 flex items-center gap-1.5 hover:bg-pink-500/25 transition-all"
+                  onClick={(e) => { e.stopPropagation(); setShowEvidence(!showEvidence); }}
+                  className="px-2.5 py-1 rounded-lg bg-pink-500/15 border border-pink-500/30 text-[11px] font-mono text-pink-400 flex items-center gap-1.5 hover:bg-pink-500/25 transition-all"
                 >
-                  <FileText className="w-3.5 h-3.5" />
-                  Source Evidence
-                  {showEvidence ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  <Shield className="w-3 h-3" />
+                  Details
+                  {showEvidence ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                 </button>
               </div>
             </div>
 
-            {/* Metrics Dashboard Row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10">
-                <p className="text-[10px] font-mono uppercase text-slate-400 mb-1">Grounding Confidence</p>
-                <div className="flex items-center gap-3">
-                  <span className={`text-xl font-black font-mono ${confidenceColor(result.confidence_score)}`}>
-                    {Math.round(result.confidence_score)}%
-                  </span>
-                  <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${confidenceBar(result.confidence_score)}`}
-                      style={{ width: `${Math.min(result.confidence_score, 100)}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10">
-                <p className="text-[10px] font-mono uppercase text-slate-400 mb-1">Winning Strategy</p>
-                <p className="text-base font-extrabold text-cyan font-mono capitalize">{result.strategy_used}</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10">
-                <p className="text-[10px] font-mono uppercase text-slate-400 mb-1">Source Pages</p>
-                <p className="text-base font-extrabold text-pink-400 font-mono">
-                  {result.supporting_pages?.length ? `Pages ${result.supporting_pages.join(', ')}` : 'N/A'}
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10">
-                <p className="text-[10px] font-mono uppercase text-slate-400 mb-1">Cited Clauses</p>
-                <p className="text-base font-extrabold text-purple font-mono">
-                  {result.supporting_clauses?.length || 0} Clauses
-                </p>
-              </div>
-            </div>
-
-            {/* Strategy Winner Scores */}
-            {result.strategy_scores && Object.keys(result.strategy_scores).length > 0 && (
-              <div className="space-y-2">
-                <p className="text-xs font-mono text-slate-400 uppercase tracking-wider">Strategy Scores per Query</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {Object.entries(result.strategy_scores).map(([strategy, score]) => (
-                    <div
-                      key={strategy}
-                      className={`p-2.5 rounded-xl text-center font-mono ${
-                        strategy === result.strategy_used
-                          ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan'
-                          : 'bg-white/[0.02] border border-white/5 text-slate-400'
-                      }`}
-                    >
-                      <p className="text-[10px] uppercase font-bold">{strategy}</p>
-                      <p className="text-sm font-black text-white">{((score || 0) * 100).toFixed(1)}%</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Unsupported Claims Alert */}
-            {result.unsupported_claims?.length > 0 && (
-              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-xs font-mono space-y-1">
-                <div className="flex items-center gap-2 text-red-400 font-bold">
-                  <AlertTriangle className="w-4 h-4" /> Unsupported Assertion Flagged
-                </div>
-                {result.unsupported_claims.map((claim, idx) => (
-                  <p key={idx} className="text-red-300 pl-6">• {claim}</p>
-                ))}
-              </div>
-            )}
-
-            {/* Evidence Drawer Accordion */}
+            {/* Expandable Details Panel */}
             <AnimatePresence>
               {showEvidence && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="pt-4 border-t border-white/10 space-y-3"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
                 >
-                  <p className="text-xs font-mono text-slate-300 font-bold uppercase">Grounding Evidence Texts</p>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {result.supporting_clauses?.map((c, idx) => (
-                      <div key={idx} className="p-3 rounded-xl bg-white/[0.02] border border-white/5 text-xs text-slate-300 font-mono">
-                        <span className="text-cyan font-bold mr-2">[{c}]:</span>
-                        "Policy clause text verified against ChromaDB vector store."
+                  <div className="px-4 pb-4 pt-2 border-t border-white/10 space-y-3 max-h-[240px] overflow-y-auto">
+                    {/* Metrics Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10">
+                        <p className="text-[9px] font-mono uppercase text-slate-400 mb-0.5">Confidence</p>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-base font-black font-mono ${confidenceColor(result.confidence_score)}`}>
+                            {Math.round(result.confidence_score)}%
+                          </span>
+                          <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${confidenceBar(result.confidence_score)}`}
+                              style={{ width: `${Math.min(result.confidence_score, 100)}%` }}
+                            />
+                          </div>
+                        </div>
                       </div>
-                    ))}
+                      <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10">
+                        <p className="text-[9px] font-mono uppercase text-slate-400 mb-0.5">Strategy</p>
+                        <p className="text-sm font-extrabold text-cyan font-mono capitalize">{result.strategy_used}</p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10">
+                        <p className="text-[9px] font-mono uppercase text-slate-400 mb-0.5">Pages</p>
+                        <p className="text-sm font-extrabold text-pink-400 font-mono">
+                          {result.supporting_pages?.length ? result.supporting_pages.join(', ') : 'N/A'}
+                        </p>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10">
+                        <p className="text-[9px] font-mono uppercase text-slate-400 mb-0.5">Clauses</p>
+                        <p className="text-sm font-extrabold text-purple font-mono">
+                          {result.supporting_clauses?.length || 0}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Strategy Scores */}
+                    {result.strategy_scores && Object.keys(result.strategy_scores).length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(result.strategy_scores).map(([strategy, score]) => (
+                          <div
+                            key={strategy}
+                            className={`px-2.5 py-1.5 rounded-lg text-center font-mono text-[11px] ${
+                              strategy === result.strategy_used
+                                ? 'bg-cyan-500/15 border border-cyan-500/30 text-cyan'
+                                : 'bg-white/[0.02] border border-white/5 text-slate-400'
+                            }`}
+                          >
+                            <span className="uppercase font-bold">{strategy}</span>
+                            <span className="ml-1.5 font-black text-white">{((score || 0) * 100).toFixed(1)}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Unsupported Claims */}
+                    {result.unsupported_claims?.length > 0 && (
+                      <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-[11px] font-mono space-y-1">
+                        <div className="flex items-center gap-2 text-red-400 font-bold">
+                          <AlertTriangle className="w-3.5 h-3.5" /> Unsupported Assertions
+                        </div>
+                        {result.unsupported_claims.map((claim, idx) => (
+                          <p key={idx} className="text-red-300 pl-5">• {claim}</p>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Evidence Texts */}
+                    {result.supporting_clauses?.length > 0 && (
+                      <div className="space-y-1.5">
+                        <p className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Grounding Evidence</p>
+                        {result.supporting_clauses.map((c, idx) => (
+                          <div key={idx} className="p-2.5 rounded-lg bg-white/[0.02] border border-white/5 text-[11px] text-slate-300 font-mono">
+                            <span className="text-cyan font-bold mr-2">[{c}]:</span>
+                            "Policy clause text verified against ChromaDB vector store."
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               )}
@@ -429,27 +451,27 @@ export default function QueryPage() {
         )}
       </AnimatePresence>
 
-      {/* Input Console Bar */}
-      <form onSubmit={handleAsk} className="glass-card p-4 space-y-3">
-        <div className="flex items-center gap-3">
+      {/* Compact Input Bar — pinned at bottom */}
+      <form onSubmit={handleAsk} className="glass-card p-3 flex-shrink-0">
+        <div className="flex items-center gap-2.5">
           <div className="flex-1 relative">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Ask any policy, deductible, or coverage question..."
-              className="w-full px-5 py-4 bg-white/[0.03] border border-white/10 rounded-2xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan/50 focus:ring-2 focus:ring-cyan/20 transition-all font-mono text-sm pr-12"
+              className="w-full px-4 py-3 bg-white/[0.03] border border-white/10 rounded-xl text-white placeholder:text-slate-500 focus:outline-none focus:border-cyan/50 focus:ring-2 focus:ring-cyan/20 transition-all font-mono text-sm pr-10"
               disabled={loading || isStreaming}
             />
             {useStreaming && (
-              <Zap className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-pink-400/50" />
+              <Zap className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-pink-400/50" />
             )}
           </div>
 
           <button
             type="submit"
             disabled={loading || isStreaming || !query.trim()}
-            className="btn-gradient !p-4 !rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed shadow-glow-pink"
+            className="btn-gradient !p-3 !rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-glow-pink"
           >
             {loading || isStreaming ? (
               <Loader2 className="w-5 h-5 animate-spin text-white" />
@@ -459,17 +481,17 @@ export default function QueryPage() {
           </button>
         </div>
 
-        <div className="flex items-center justify-between px-2 text-xs font-mono text-slate-400">
-          <label className="flex items-center gap-2 cursor-pointer hover:text-white transition-colors">
+        <div className="flex items-center justify-between px-1 pt-1.5 text-[10px] font-mono text-slate-500">
+          <label className="flex items-center gap-1.5 cursor-pointer hover:text-slate-300 transition-colors">
             <input
               type="checkbox"
               checked={useLlmJudge}
               onChange={(e) => setUseLlmJudge(e.target.checked)}
-              className="rounded border-white/20 bg-white/5 text-pink-500 focus:ring-pink-500/20"
+              className="rounded border-white/20 bg-white/5 text-pink-500 focus:ring-pink-500/20 w-3 h-3"
             />
-            <span>LLM Judge Cross-Verification</span>
+            <span>LLM Judge</span>
           </label>
-          <span>Session Token: {sessionId.split('_')[1]}</span>
+          <span className="tracking-wider">#{sessionId.split('_')[1].toUpperCase()}</span>
         </div>
       </form>
     </div>

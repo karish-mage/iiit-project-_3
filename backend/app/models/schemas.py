@@ -191,6 +191,13 @@ class StatsResponse(BaseModel):
     strategies_available: int = 4
     avg_confidence: float
     total_chunks: int = 0
+    avg_accuracy: float = 0.0
+    avg_precision: float = 0.0
+    avg_recall: float = 0.0
+    avg_context_relevance: float = 0.0
+    avg_response_time_ms: float = 0.0
+    active_provider: str = "none"
+    active_model: str = "not-set"
 
 
 # ── Evaluation Results (Analytics Dashboard) ──────────────
@@ -224,3 +231,4 @@ class AnalyticsResponse(BaseModel):
     strategy_win_rates: Dict[str, float]
     avg_metrics_per_strategy: Dict[str, Dict[str, float]]
     domain_stats: Optional[Dict[str, int]] = None
+    strategy_summary: Optional[Dict[str, Dict[str, float]]] = None

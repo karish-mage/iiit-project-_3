@@ -21,6 +21,7 @@ export default function UploadPage() {
   const [customerResult, setCustomerResult] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [activeTab, setActiveTab] = useState('documents');
+  const [uploadError, setUploadError] = useState('');
 
   useEffect(() => {
     loadDocuments();
@@ -60,12 +61,13 @@ export default function UploadPage() {
   const handleUpload = async () => {
     if (!files.length) return;
     setUploading(true);
+    setUploadError('');
     try {
       await uploadDocuments(files);
       setFiles([]);
       await loadDocuments();
     } catch (e) {
-      console.error('Upload failed:', e);
+      setUploadError(e?.response?.data?.detail || 'Upload failed. Ensure files are valid PDFs/TXTs.');
     }
     setUploading(false);
   };
@@ -73,12 +75,14 @@ export default function UploadPage() {
   const handleProcess = async () => {
     setProcessing(true);
     setProcessResult(null);
+    setUploadError('');
     try {
       const res = await processDocuments();
       setProcessResult(res.data);
       await loadDocuments();
     } catch (e) {
       setProcessResult({ message: `Error: ${e.message}`, documents_processed: 0, chunks_created: {} });
+      setUploadError(e?.response?.data?.detail || 'Processing failed. Ensure documents are uploaded first.');
     }
     setProcessing(false);
   };
@@ -159,6 +163,14 @@ export default function UploadPage() {
           Customer Datasets (.CSV, .XLSX)
         </button>
       </div>
+
+      {/* Error Banner */}
+      {uploadError && (
+        <div className="glass-card p-4 flex items-center gap-3 border-red-500/30">
+          <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0" />
+          <span className="text-sm text-red-300 font-mono">{uploadError}</span>
+        </div>
+      )}
 
       {/* Tab 1: PDF Documents Ingestion */}
       {activeTab === 'documents' && (

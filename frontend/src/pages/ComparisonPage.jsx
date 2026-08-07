@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   GitCompare, Send, Trophy, Clock, Target, Brain,
-  ChevronDown, ChevronUp, Loader2, Sparkles, Sliders, Layers
+  ChevronDown, ChevronUp, Loader2, Sparkles, Sliders, Layers, AlertTriangle
 } from 'lucide-react';
 import { compareStrategies } from '../services/api';
 
@@ -17,17 +17,20 @@ export default function ComparisonPage() {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [error, setError] = useState('');
   const [expandedStrategy, setExpandedStrategy] = useState(null);
 
   const handleCompare = async (e) => {
     if (e) e.preventDefault();
     if (!query.trim() || loading) return;
     setLoading(true);
+    setError('');
     try {
       const res = await compareStrategies(query);
       setResult(res.data || res);
     } catch (err) {
       setResult(null);
+      setError(err?.response?.data?.detail || 'Failed to run comparison. Ensure documents are uploaded and indexed.');
     }
     setLoading(false);
   };
@@ -224,8 +227,16 @@ export default function ComparisonPage() {
         )}
       </AnimatePresence>
 
+      {/* Error Banner */}
+      {error && (
+        <div className="glass-card p-4 flex items-center gap-3 border-red-500/30">
+          <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0" />
+          <span className="text-sm text-red-300 font-mono">{error}</span>
+        </div>
+      )}
+
       {/* Empty Placeholder */}
-      {!result && !loading && (
+      {!result && !loading && !error && (
         <div className="glass-card p-16 text-center space-y-3">
           <Sliders className="w-12 h-12 text-slate-600 mx-auto" />
           <h3 className="text-lg font-bold text-white">No Evaluation Executed Yet</h3>

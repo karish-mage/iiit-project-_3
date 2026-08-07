@@ -43,7 +43,7 @@ const benefits = [
   { icon: Zap, title: 'Real-Time Streaming Answers', desc: 'Instant SSE streaming with low latency retrieval across millions of tokens' },
   { icon: BarChart3, title: 'Comprehensive Benchmarks', desc: 'Live charts tracking Precision@K, Recall@K, and Context Relevance across strategies' },
   { icon: Lock, title: 'Enterprise Policy Security', desc: 'Strict data boundary isolation and source document clause grounding' },
-  { icon: Award, title: 'IIIT Hackathon Ready', desc: 'Production-ready architecture, FastAPI backend, ChromaDB vector store, and Gemini Pro' },
+  { icon: Award, title: 'IIIT Hackathon Ready', desc: 'Production-ready architecture, FastAPI backend, ChromaDB vector store, and adaptive LLM generation' },
 ];
 
 export default function HomePage() {
@@ -140,10 +140,10 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: 'Documents Indexed', value: stats?.documents_indexed ?? 14, icon: FileText, color: 'text-pink-400' },
-            { label: 'Queries Evaluated', value: stats?.queries_answered ?? 128, icon: Search, color: 'text-cyan' },
-            { label: 'Grounding Precision', value: `${stats?.avg_confidence ?? 98.6}%`, icon: Shield, color: 'text-emerald-400' },
-            { label: 'Total Vector Chunks', value: stats?.total_chunks ?? 1420, icon: Layers, color: 'text-purple' },
+            { label: 'Documents Indexed', value: stats?.documents_indexed ?? 0, icon: FileText, color: 'text-pink-400' },
+            { label: 'Queries Evaluated', value: stats?.queries_answered ?? 0, icon: Search, color: 'text-cyan' },
+            { label: 'Grounding Precision', value: `${(stats?.avg_confidence ?? 0).toFixed(1)}%`, icon: Shield, color: 'text-emerald-400' },
+            { label: 'Total Vector Chunks', value: stats?.total_chunks ?? 0, icon: Layers, color: 'text-purple' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -158,9 +158,13 @@ export default function HomePage() {
                   LIVE
                 </span>
               </div>
-              <p className="text-3xl md:text-4xl font-extrabold font-mono text-white tracking-tight">
-                {statsLoading ? '...' : stat.value}
-              </p>
+              {statsLoading ? (
+                <div className="skeleton h-9 w-20 rounded-lg" />
+              ) : (
+                <p className="text-3xl md:text-4xl font-extrabold font-mono text-white tracking-tight">
+                  {stat.value}
+                </p>
+              )}
               <p className="text-xs font-mono text-slate-400 uppercase tracking-wider mt-2">{stat.label}</p>
             </motion.div>
           ))}
@@ -243,7 +247,7 @@ export default function HomePage() {
             {
               num: '03',
               title: 'Verified Evidence Answer',
-              desc: 'Google Gemini Pro constructs the response using the winning strategy. The verification engine checks every assertion against source clause text.',
+              desc: 'The LLM constructs the response using the winning strategy. The verification engine checks every assertion against source clause text.',
               icon: CheckCircle2,
             },
           ].map((step, i) => (

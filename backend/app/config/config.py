@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     # --- Embeddings ---
     embedding_provider: str = "local"          # "local" | "hosted"
     embedding_model: str = "all-MiniLM-L6-v2"
+    hf_token: str = "not-set"                  # Hugging Face token for model downloads
 
     # --- ChromaDB ---
     chroma_persist_dir: str = "./data/chroma_db"
@@ -50,7 +51,7 @@ class Settings(BaseSettings):
     # --- Server ---
     host: str = "0.0.0.0"
     port: int = 8000
-    cors_origins: str = "http://localhost:5173,http://localhost:5174,http://localhost:3000"
+    cors_origins: str = "http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:3000"
 
     # --- Paths ---
     raw_pdfs_dir: str = "./data/raw_pdfs"
@@ -98,6 +99,11 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+# Expose HF token to huggingface_hub / sentence-transformers
+if settings.hf_token and settings.hf_token != "not-set":
+    os.environ["HF_TOKEN"] = settings.hf_token
+    os.environ["HUGGING_FACE_HUB_TOKEN"] = settings.hf_token
 
 # Ensure data directories exist
 os.makedirs(settings.raw_pdfs_dir, exist_ok=True)
