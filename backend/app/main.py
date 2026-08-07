@@ -208,13 +208,17 @@ def process_documents(db: Session = Depends(get_db)):
     ).all()
 
     # Initialize chunkers
+    embedding_engine = get_embedding_engine()
+    semantic_chunker = SemanticChunker(
+        breakpoint_threshold=settings.semantic_breakpoint_threshold,
+        max_chunk_size=settings.adaptive_max_chunk_size,
+    )
+    semantic_chunker.set_embedding_func(lambda texts: embedding_engine.embed_texts(texts))
+
     chunkers = {
         "fixed": FixedChunker(settings.fixed_chunk_size, settings.fixed_chunk_overlap),
         "recursive": RecursiveChunker(settings.recursive_chunk_size, settings.recursive_chunk_overlap),
-        "semantic": SemanticChunker(
-            breakpoint_threshold=settings.semantic_breakpoint_threshold,
-            max_chunk_size=settings.adaptive_max_chunk_size,
-        ),
+        "semantic": semantic_chunker,
         "adaptive": AdaptiveChunker(
             max_chunk_size=settings.adaptive_max_chunk_size,
             min_chunk_size=settings.adaptive_min_chunk_size,
@@ -461,20 +465,31 @@ async def chat_stream(request: ChatRequest):
         eval_results[strategy] = metrics
 
     selector = get_strategy_selector()
-    winner, _, _ = selector.select_best_strategy(eval_results)
+    winner, winner_score, scores = selector.select_best_strategy(eval_results)
     winning_chunks = all_results[winner]["chunks"]
 
     generator = get_answer_generator()
 
     if request.stream:
         def event_generator():
+            full_answer = ""
             for text_chunk in generator.generate_stream(
                 query, winning_chunks, winner, session_id=request.session_id
             ):
+                full_answer += text_chunk
                 yield f"data: {json.dumps({'text': text_chunk, 'done': False})}\n\n"
-            # Send metadata at the end
+
+            # Run verification on the full answer
+            verifier = get_verification_engine()
+            verification = verifier.verify_answer(full_answer, winning_chunks)
+
             metadata = {
                 "strategy_used": winner,
+                "confidence_score": verification["confidence_score"],
+                "supporting_clauses": verification["supporting_clauses"],
+                "supporting_pages": verification["supporting_pages"],
+                "unsupported_claims": verification["unsupported_claims"],
+                "strategy_scores": scores,
                 "chunks_used": len(winning_chunks),
                 "sources": [
                     {"document": c.get("document_name", ""), "page": c.get("page_number", 0)}
@@ -492,7 +507,20 @@ async def chat_stream(request: ChatRequest):
         answer_result = generator.generate_answer(
             query, winning_chunks, winner, session_id=request.session_id
         )
-        return {"text": answer_result["answer_text"], "done": True, "metadata": {"strategy_used": winner}}
+        verifier = get_verification_engine()
+        verification = verifier.verify_answer(answer_result["answer_text"], winning_chunks)
+        return {
+            "text": answer_result["answer_text"],
+            "done": True,
+            "metadata": {
+                "strategy_used": winner,
+                "confidence_score": verification["confidence_score"],
+                "supporting_clauses": verification["supporting_clauses"],
+                "supporting_pages": verification["supporting_pages"],
+                "unsupported_claims": verification["unsupported_claims"],
+                "strategy_scores": scores,
+            },
+        }
 
 
 # ═══════════════════════════════════════════════════════════
@@ -708,21 +736,24 @@ def run_evaluation(db: Session = Depends(get_db)):
     results = []
     strategy_totals = {}
 
+    selector = get_strategy_selector()
+
     for item in benchmark:
         query = item["question"]
         all_results = retrieval.retrieve_all_strategies(query)
 
+        eval_results = {}
         for strategy, result in all_results.items():
-            metrics = evaluator.evaluate_retrieval(
+            eval_results[strategy] = evaluator.evaluate_retrieval(
                 query=query, strategy_name=strategy,
                 retrieved_chunks=result["chunks"],
                 similarity_scores=result["scores"],
                 latency_ms=result["latency_ms"],
             )
 
-            selector = get_strategy_selector()
-            _, _, scores = selector.select_best_strategy({strategy: metrics})
+        _, _, scores = selector.select_best_strategy(eval_results)
 
+        for strategy, metrics in eval_results.items():
             run = EvaluationRun(
                 query=query, strategy_name=strategy,
                 precision_at_k=metrics["precision_at_k"],
@@ -905,7 +936,7 @@ def reindex_document(doc_id: int, db: Session = Depends(get_db)):
 @app.get("/metadata/{collection}", response_model=MetadataResponse)
 def get_collection_metadata(collection: str, limit: int = 100):
     """Retrieve metadata from a ChromaDB collection."""
-    from app.vector_store import STRATEGY_COLLECTIONS, DOMAIN_COLLECTIONS
+    from app.rag.vector_store import STRATEGY_COLLECTIONS, DOMAIN_COLLECTIONS
     store = get_vector_store()
 
     # Allow both collection names and strategy/domain keys

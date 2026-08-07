@@ -61,7 +61,7 @@ class BaseChunker(ABC):
                     section_title: Optional[str] = None, clause_number: Optional[str] = None,
                     idx: int = 0) -> ChunkData:
         """Helper to build a ChunkData with standard fields populated."""
-        from app.document_processor import count_tokens
+        from app.services.document_processor import count_tokens
         return ChunkData(
             chunk_id=f"{self.strategy_name}_{doc_id}_{idx}",
             doc_id=doc_id,
